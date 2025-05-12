@@ -1,0 +1,97 @@
+/* common-elements.css - Styles for Header, Footer, Nav */
+
+/* Header */
+header.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px; /* More padding */
+    color: #FFFFFF;
+    background-color: #343A40; /* Dark */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header.main-header .logo-container {
+    display: flex;
+    align-items: center;
+}
+
+header.main-header .logo-container img {
+    height: 40px; /* Adjust as needed */
+    margin-right: 15px;
+}
+
+header.main-header h1 {
+    font-size: 1.6em;
+    margin: 0;
+    color: #FFFFFF;
+}
+
+header.main-header .user-info {
+    font-size: 0.9em;
+}
+
+header.main-header .user-info a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: #ADB5BD; /* Lighter link color */
+}
+
+header.main-header .user-info a:hover {
+    color: #FFFFFF;
+}
+
+/* Navigation */
+nav.side-nav {
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 220px; /* Slightly wider */
+    padding: 20px 0; /* Padding top/bottom only */
+    color: #E9ECEF;
+    background: #495057; /* Slightly lighter dark */
+}
+
+nav.side-nav h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    padding: 0 20px 10px 20px;
+    color: #F8F9FA;
+    border-bottom: 1px solid #6C757D;
+}
+
+nav.side-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav.side-nav ul li a {
+    display: block;
+    padding: 10px 20px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    text-decoration: none;
+    color: #CED4DA;
+    border-left: 3px solid transparent; /* For active indication */
+}
+
+nav.side-nav ul li a:hover {
+    color: #FFFFFF;
+    border-left-color: #007BFF; /* Highlight on hover */
+    background-color: #5A6268;
+}
+
+nav.side-nav ul li a.active { /* TODO: Add logic in JSPs to apply 'active' class based on current page */
+    font-weight: bold;
+    color: #FFFFFF;
+    border-left-color: #007BFF;
+    background-color: #6C757D;
+}
+
+/* Footer */
+footer.main-footer {
+    font-size: 0.9em;
+    margin-top: auto; /* Push footer to bottom */
+    padding: 15px 20px;
+    text-align: center;
+    color: #ADB5BD;
+    background-color: #343A40; /* Dark */
+}

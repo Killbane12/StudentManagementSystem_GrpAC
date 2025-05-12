@@ -1,4 +1,4 @@
-package com.grpac_sms.studentmanagementsystem_grpac;
+package com.grpAC_SMS.studentmanagementsystem_grpac;
 
 import java.io.*;
 
