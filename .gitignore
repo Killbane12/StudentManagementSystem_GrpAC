@@ -36,6 +36,7 @@ target/
 nbproject/private/
 build/
 dist/
+
 # Sensitive configuration
 #src/main/resources/db/database.properties
 # If test properties are different and sensitive
@@ -47,3 +48,6 @@ src/test/resources/test-database.properties
 # Windows thumbnail cache files
 Thumbs.db
 /create_structure.bat
+
+#Other files/folders
+/src/main/java/com/grpAC_SMS/studentmanagementsystem_grpac/
