@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     // Simple redirect to the login page
-    // Alternatively, could check session here or map '/' to a servlet
     String contextPath = request.getContextPath();
     response.sendRedirect(contextPath + "/auth/login.jsp");
 %>
