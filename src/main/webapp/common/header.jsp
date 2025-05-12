@@ -5,7 +5,7 @@
     <div class="logo-container">
         <%-- Assuming logo.png is in assets/img/ --%>
         <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo">
-        <h1>NSBM Student Management System</h1>
+            <h1>Student Management System by Group_AC</h1>
     </div>
     <div class="user-info">
         <c:if test="${not empty sessionScope.loggedInUser}">

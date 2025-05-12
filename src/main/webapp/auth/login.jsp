@@ -5,7 +5,7 @@
 <head>
     <link rel="icon" href="${pageContext.request.contextPath}/assets/img/favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
-    <title>Login - NSBM SMS</title>
+    <title>Login | Student Management System - Group_AC</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common-elements.css">
     <style>
