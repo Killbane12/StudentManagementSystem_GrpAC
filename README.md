@@ -26,12 +26,21 @@ This project is a web-based Student Management System developed for NSBM as part
 
 ## Setup and Installation
 
-<!-- TODO: Add instructions on how to set up the database, build, and deploy the application -->
+<!-- instructions on how to set up the database, build, and deploy the application -->
 
 ## Usage
 
-<!-- TODO: Add brief instructions on how to use the system for different roles -->
+<!-- brief instructions on how to use the system for different roles -->
 
 ## Team Members
 
-*   [List Team Member Names]
+*   DMPA Wijekoon
+*   RSD Senarathne
+*   DPS Senarathne
+*   KEI Kovilawatte
+*   Rukshan
+*   Hiruni
+*   Isuri
+*   Osagani
+*   Yashara
+*   lahiru
