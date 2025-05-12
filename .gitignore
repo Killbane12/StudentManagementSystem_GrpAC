@@ -37,7 +37,7 @@ nbproject/private/
 build/
 dist/
 # Sensitive configuration
-src/main/resources/db/database.properties
+#src/main/resources/db/database.properties
 # If test properties are different and sensitive
 src/test/resources/test-database.properties
 
