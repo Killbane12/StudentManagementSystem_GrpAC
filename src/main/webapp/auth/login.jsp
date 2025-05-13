@@ -57,13 +57,14 @@
     <form action="${pageContext.request.contextPath}/LoginServlet" method="post">
         <div>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" required placeholder="Enter username">
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required placeholder="Enter password">
         </div>
         <button type="submit">Login</button>
+        <button type="button" onclick="location.href='${pageContext.request.contextPath}/RegisterServlet'">Register</button>
     </form>
 </main>
 
