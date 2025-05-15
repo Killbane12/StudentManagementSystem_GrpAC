@@ -17,5 +17,7 @@ public interface UserDao {
 
 //    boolean update(User user) throws DataAccessException;
 
+    boolean update(User user) throws DataAccessException;
+
     boolean delete(int userId) throws DataAccessException;
 }
