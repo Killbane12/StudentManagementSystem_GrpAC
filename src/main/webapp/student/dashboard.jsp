@@ -87,7 +87,7 @@
                         <a href="#" class="active">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Courses</a>
+                        <a href="../student/my_enrolled_courses">Courses</a>
                     </li>
                     <li class="nav-item">
                         <a href="#">Grades</a>
