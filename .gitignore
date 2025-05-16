@@ -50,4 +50,4 @@ Thumbs.db
 /create_structure.bat
 
 #Other files/folders
-/src/main/java/com/grpAC_SMS/studentmanagementsystem_grpac/
+/src/main/webapp/studentmanagementsystem_grpac/
