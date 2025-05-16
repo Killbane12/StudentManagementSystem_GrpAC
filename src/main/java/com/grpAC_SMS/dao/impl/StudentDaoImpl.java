@@ -4,21 +4,17 @@ import com.grpAC_SMS.dao.StudentDao;
 import com.grpAC_SMS.model.Student;
 import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.util.DatabaseConnector;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class StudentDaoImpl implements StudentDao {
 
-    // Select user table in the student email
+
     @Override
     public User getUserByUsername(String username) {
-        String sql = "SELECT * FROM student WHERE username = ?";
+        String sql = "SELECT * FROM Users WHERE username = ?";
 
         try (Connection conn = DatabaseConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
@@ -28,22 +24,22 @@ public class StudentDaoImpl implements StudentDao {
                 user.setEmail(rs.getString("email"));
                 return user;
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    // Select the student table in the student data
     @Override
     public Student getStudentByUsername(String username) {
-
-        String sql = "SELECT s.*, u.email FROM Student s " +
-                "JOIN Users u ON s.user_id = u.user_id" +
+        String sql = "SELECT s.*, u.email FROM Students s " +
+                "JOIN Users u ON s.user_id = u.user_id " +
                 "WHERE u.username = ?";
 
+
         try (Connection conn = DatabaseConnector.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
@@ -61,11 +57,9 @@ public class StudentDaoImpl implements StudentDao {
                 student.setPhoneNumber(rs.getString("phone_number"));
                 return student;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }
