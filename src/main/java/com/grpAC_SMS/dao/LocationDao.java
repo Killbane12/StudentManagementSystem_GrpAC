@@ -1,19 +1,20 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Location;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface LocationDao {
-    void create(Location location) throws DataAccessException;
+    Location add(Location location);
 
-    Optional<Location> findById(int locationId) throws DataAccessException;
+    Optional<Location> findById(int locationId);
 
-    List<Location> findAll() throws DataAccessException;
+    Optional<Location> findByName(String name);
 
-    boolean update(Location location) throws DataAccessException;
+    List<Location> findAll();
 
-    boolean delete(int locationId) throws DataAccessException;
+    void update(Location location);
+
+    boolean delete(int locationId);
 }

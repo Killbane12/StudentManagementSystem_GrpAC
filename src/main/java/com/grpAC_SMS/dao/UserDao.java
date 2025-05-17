@@ -1,23 +1,24 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserDao {
-    void create(User user) throws DataAccessException;
+    Optional<User> findByUsername(String username);
 
-    Optional<User> findById(int userId) throws DataAccessException;
+    Optional<User> findById(int userId);
 
-    Optional<User> findByUsername(String username) throws DataAccessException; // Crucial for login
+    List<User> findAll();
 
-    List<User> findAll() throws DataAccessException;
+    User save(User user); // For both create and update
 
-    boolean update(User user) throws DataAccessException;
+    void update(User user);
 
-    boolean update(User user) throws DataAccessException;
+    void delete(int userId);
 
-    boolean delete(int userId) throws DataAccessException;
+    boolean activateUser(int userId, boolean isActive);
+
+    int getNextUserId(); // For linking student/faculty profiles before user record is fully saved by UserServlet
 }
