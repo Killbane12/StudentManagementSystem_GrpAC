@@ -49,7 +49,7 @@ public class ApplicationContextListener implements ServletContextListener {
             admin.setRole(Role.ADMIN);
             admin.setActive(true);
             try {
-                userDao.save(admin);
+//                userDao.save(admin);
                 logger.info("Default admin user 'admin' created successfully.");
             } catch (Exception e) {
                 logger.error("Failed to create default admin user: {}", e.getMessage(), e);
