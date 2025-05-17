@@ -1,21 +1,26 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Faculty;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface FacultyDao {
-    void create(Faculty faculty) throws DataAccessException;
+    Faculty add(Faculty faculty);
 
-    Optional<Faculty> findById(int facultyMemberId) throws DataAccessException;
+    Optional<Faculty> findById(int facultyMemberId);
 
-    List<Faculty> findAll() throws DataAccessException;
+    Optional<Faculty> findByUserId(int userId);
 
-    boolean update(Faculty faculty) throws DataAccessException;
+    Optional<Faculty> findByFacultyUniqueId(String facultyUniqueId);
 
-    boolean delete(int facultyMemberId) throws DataAccessException;
+    List<Faculty> findAll();
 
-    Optional<Faculty> findByUserId(int userId) throws DataAccessException; // Added method
+    List<Faculty> findAllWithDetails(); // Includes department name, user email
+
+    void update(Faculty faculty);
+
+    boolean delete(int facultyMemberId);
+
+    long countTotalFaculty();
 }
