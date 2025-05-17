@@ -1,25 +1,27 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Course;
+import com.grpAC_SMS.model.Department;
+import com.grpAC_SMS.model.Program;
 import com.grpAC_SMS.model.Student;
+import com.grpAC_SMS.exception.DataAccessException;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 
+/**
+ * DAO interface for course-related database operations
+ */
 public interface CourseDao {
-    void create(Course course) throws DataAccessException;
 
-    Optional<Course> findById(int courseId) throws DataAccessException;
+    // Get program details for a student
+    Program getStudentProgram(int studentId);
 
-    List<Course> findAll() throws DataAccessException;
+    // Get department by ID
+    Department getDepartmentById(int departmentId);
 
-    boolean update(Course course) throws DataAccessException;
+    // Get all courses for a program
+    List<Course> getCoursesByProgramId(int programId);
 
-    boolean delete(int courseId) throws DataAccessException;
-
-    List<Course> findByDepartment(int departmentId) throws DataAccessException;
-  
-    List<Course> selectCourse(); // Added method
 }
