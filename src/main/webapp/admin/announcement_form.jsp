@@ -11,7 +11,63 @@
         body {
             font-family: sans-serif;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
+        /*h1{text-align: center;}*/
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #343A40;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .backDashboard{
+            text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
@@ -70,59 +126,59 @@
     <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/announcements'">View All Announcements</button>
 </form>
 
-<a href="${pageContext.request.contextPath}/admin/dashboard">Back to Dashboard</a>
+<p><a href="${pageContext.request.contextPath}/admin/dashboard" class="backDashboard">Back to Dashboard</a></p>
 
 
 
-<script>
-    // Basic client-side validation (you might want to enhance this)
-    const form = document.querySelector('form');
-    const titleInput = document.getElementById('title');
-    const contentInput = document.getElementById('content');
-    const postedByUserIdInput = document.getElementById('postedByUserId');
-    const targetRoleSelect = document.getElementById('targetRole');
+    <script>
+        // Basic client-side validation (you might want to enhance this)
+        const form = document.querySelector('form');
+        const titleInput = document.getElementById('title');
+        const contentInput = document.getElementById('content');
+        const postedByUserIdInput = document.getElementById('postedByUserId');
+        const targetRoleSelect = document.getElementById('targetRole');
 
-    form.addEventListener('submit', (event) => {
-        let isValid = true;
+        form.addEventListener('submit', (event) => {
+            let isValid = true;
 
-        if (titleInput.value.trim() === '') {
-            document.getElementById('titleError').textContent = 'Title is required.';
-            isValid = false;
-        } else if (titleInput.value.length < 3 || titleInput.value.length > 255) {
-            document.getElementById('titleError').textContent = 'Title must be between 3 and 255 characters.';
-            isValid = false;
-        } else {
-            document.getElementById('titleError').textContent = '';
-        }
+            if (titleInput.value.trim() === '') {
+                document.getElementById('titleError').textContent = 'Title is required.';
+                isValid = false;
+            } else if (titleInput.value.length < 3 || titleInput.value.length > 255) {
+                document.getElementById('titleError').textContent = 'Title must be between 3 and 255 characters.';
+                isValid = false;
+            } else {
+                document.getElementById('titleError').textContent = '';
+            }
 
-        if (contentInput.value.trim() === '') {
-            document.getElementById('contentError').textContent = 'Content is required.';
-            isValid = false;
-        } else if (contentInput.value.length < 5) {
-            document.getElementById('contentError').textContent = 'Content must be at least 5 characters.';
-            isValid = false;
-        } else {
-            document.getElementById('contentError').textContent = '';
-        }
+            if (contentInput.value.trim() === '') {
+                document.getElementById('contentError').textContent = 'Content is required.';
+                isValid = false;
+            } else if (contentInput.value.length < 5) {
+                document.getElementById('contentError').textContent = 'Content must be at least 5 characters.';
+                isValid = false;
+            } else {
+                document.getElementById('contentError').textContent = '';
+            }
 
-        if (postedByUserIdInput.value.trim() === '' || isNaN(postedByUserIdInput.value)) {
-            document.getElementById('postedByUserIdError').textContent = 'User ID is required and must be a number.';
-            isValid = false;
-        } else {
-            document.getElementById('postedByUserIdError').textContent = '';
-        }
+            if (postedByUserIdInput.value.trim() === '' || isNaN(postedByUserIdInput.value)) {
+                document.getElementById('postedByUserIdError').textContent = 'User ID is required and must be a number.';
+                isValid = false;
+            } else {
+                document.getElementById('postedByUserIdError').textContent = '';
+            }
 
-        if (targetRoleSelect.value === '') {
-            document.getElementById('targetRoleError').textContent = 'Please select a target role.';
-            isValid = false;
-        } else {
-            document.getElementById('targetRoleError').textContent = '';
-        }
+            if (targetRoleSelect.value === '') {
+                document.getElementById('targetRoleError').textContent = 'Please select a target role.';
+                isValid = false;
+            } else {
+                document.getElementById('targetRoleError').textContent = '';
+            }
 
-        if (!isValid) {
-            event.preventDefault(); // Prevent form submission if validation fails
-        }
-    });
-</script>
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
+    </script>
 </body>
 </html>

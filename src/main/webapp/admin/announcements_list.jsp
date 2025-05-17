@@ -11,6 +11,87 @@
         body {
             font-family: sans-serif;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /*h1 {*/
+        /*    margin-bottom: 20px;*/
+        /*    text-align: center;*/
+        /*}*/
+
+        .controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .controls input[type="text"],
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .controls button {
+            padding: 10px 15px;
+            background-color: #343A40;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .controls button:hover {
+            opacity: 0.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 3px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .actions a.edit {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .actions a.delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .actions a:hover {
+            opacity: 0.8
+        }
+
+        .backDashboard{
+            text-decoration: none;
         }
 
     </style>
@@ -22,7 +103,7 @@
 
 <div class="controls">
     <button onclick="window.location.href='${pageContext.request.contextPath}/announcements/add'">Add New Announcement</button>
-    <a href="${pageContext.request.contextPath}/admin/dashboard">Back to Dashboard</a>
+    <br>
     <div>
         <label for="searchTitle">Search Title:</label>
         <input type="text" id="searchTitle" name="searchTitle" onkeyup="filterTable()">
@@ -80,6 +161,8 @@
     </c:if>
     </tbody>
 </table>
+
+<p><a href="${pageContext.request.contextPath}/admin/dashboard" class="backDashboard">Back to Dashboard</a></p>
 
 <script>
     function filterTable() {
