@@ -14,7 +14,7 @@
         <li><a href="${pageContext.request.contextPath}/admin/sessions?action=list">Manage Lecture Sessions</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/enrollments?action=list">Manage Enrollments</a></li>
 <%--        <li><a href="${pageContext.request.contextPath}/admin/announcements?action=list">Manage Announcements</a></li>--%>
-        <li><a href="${pageContext.request.contextPath}/admin/announcement_form.jsp?action=list">Manage Announcements</a></li>
+        <li><a href="${pageContext.request.contextPath}/announcements/add">Manage Announcements</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/nfc_attendance_simulator.jsp">NFC Attendance Sim</a></li>
         <%-- TODO: Add links for Admin Grade/Attendance oversight if separate pages created --%>
     </ul>

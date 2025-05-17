@@ -22,6 +22,7 @@
 
 <div class="controls">
     <button onclick="window.location.href='${pageContext.request.contextPath}/announcements/add'">Add New Announcement</button>
+    <a href="${pageContext.request.contextPath}/admin/dashboard">Back to Dashboard</a>
     <div>
         <label for="searchTitle">Search Title:</label>
         <input type="text" id="searchTitle" name="searchTitle" onkeyup="filterTable()">

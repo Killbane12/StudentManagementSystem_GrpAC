@@ -66,7 +66,11 @@
     <c:if test="${announcement.announcementId != 0}">
         <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/announcements'">Cancel</button>
     </c:if>
+
+    <button type="button" onclick="window.location.href='${pageContext.request.contextPath}/announcements'">View All Announcements</button>
 </form>
+
+<a href="${pageContext.request.contextPath}/admin/dashboard">Back to Dashboard</a>
 
 
 
