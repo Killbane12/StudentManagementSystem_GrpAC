@@ -130,6 +130,21 @@ public class ManageAnnouncementsServlet extends HttpServlet {
         Date expiryDate = null;
 
 
+        // input validation
+        if (!InputValidator.isValidString(title, 3, 255)) {
+            request.setAttribute("errorMessage", "Title must be between 3 and 255 characters");
+            request.setAttribute("announcement", createAnnouncementFromRequest(request)); //Repopulate the form
+            request.getRequestDispatcher("/admin/announcement_form.jsp").forward(request, response);
+            return;
+        }
+        if (!InputValidator.isValidString(content, 5, Integer.MAX_VALUE)) {
+            request.setAttribute("errorMessage", "Content must be at least 5 characters");
+            request.setAttribute("announcement", createAnnouncementFromRequest(request));
+            request.getRequestDispatcher("/admin/announcement_form.jsp").forward(request, response);
+            return;
+        }
+
+
         try {
             postedByUserId = Integer.parseInt(postedByUserIdParam);
         } catch (NumberFormatException e) {
