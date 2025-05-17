@@ -14,15 +14,9 @@
 <%--<h1>Personalized student dashboard</h1>--%>
 <%--</body>--%>
 <%--</html>--%>
-
-
-
-
-
-
-
-
-
+<%@ page import="com.grpAC_SMS.model.Student" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.grpAC_SMS.model.Course" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>

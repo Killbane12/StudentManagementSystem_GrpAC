@@ -5,6 +5,8 @@ import com.grpAC_SMS.model.Course;
 import com.grpAC_SMS.model.Department;
 import com.grpAC_SMS.model.Program;
 import com.grpAC_SMS.util.DatabaseConnector;
+import com.grpAC_SMS.model.Student;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,5 +91,6 @@ public class CourseDaoImpl implements CourseDao {
             e.printStackTrace();
         }
         return courses;
+
     }
 }
