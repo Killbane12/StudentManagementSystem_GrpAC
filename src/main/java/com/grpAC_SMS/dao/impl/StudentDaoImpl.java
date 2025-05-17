@@ -71,6 +71,13 @@ public class StudentDaoImpl implements StudentDao {
                 student.setGender(rs.getString("gender"));
                 student.setAddress(rs.getString("address"));
                 student.setPhoneNumber(rs.getString("phone_number"));
+                student.setEnrollmentDate(rs.getDate("enrollment_date"));
+                student.setProgramId(rs.getInt("program_id"));
+                student.setCreatedAt(rs.getTimestamp("created_at"));
+                student.setUpdatedAt(rs.getTimestamp("updated_at"));
+
+                students.add(student);
+                System.out.println(student);
                 return student;
             }
         } catch (SQLException e) {

@@ -1,11 +1,14 @@
 package com.grpAC_SMS.controller.student;
 
-
+import com.grpAC_SMS.dao.CourseDao;
 import com.grpAC_SMS.dao.StudentDao;
-import com.grpAC_SMS.dao.impl.StudentDaoImpl;
-import com.grpAC_SMS.model.Student;
 import com.grpAC_SMS.model.User;
+import com.grpAC_SMS.dao.impl.CourseDaoImpl;
+import com.grpAC_SMS.dao.impl.StudentDaoImpl;
 import com.grpAC_SMS.util.ApplicationConstants;
+import com.grpAC_SMS.model.Course;
+import com.grpAC_SMS.model.Student;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Servlet that handles the student dashboard view.
@@ -71,6 +75,16 @@ public class StudentDashboardServlet extends HttpServlet {
         // Forward request to the JSP page for rendering the dashboard
         RequestDispatcher dispatcher = request.getRequestDispatcher("/student/dashboard.jsp");
         dispatcher.forward(request, response);
+      
+        StudentDaoImpl stuimpl = new StudentDaoImpl();
+        List<Student> students = stuimpl.selectStudents();
+        req.setAttribute("student_list", students);
+        stuimpl.selectStudents();
+
+        CourseDaoImpl coimpl = new CourseDaoImpl();
+        List<Course> co = coimpl.selectCourse();
+        req.setAttribute("course_list", co);
+        coimpl.selectCourse();
     }
 
 }
