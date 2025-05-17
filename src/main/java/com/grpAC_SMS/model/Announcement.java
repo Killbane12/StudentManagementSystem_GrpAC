@@ -1,24 +1,21 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
-/**
- * Model class representing a System Announcement.
- */
-public class Announcement implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Announcement {
     private int announcementId;
     private String title;
     private String content;
-    private int postedByUserId; // FK
-    private String targetRole; // Could use Role Enum: private Role targetRole;
-    private String imageFilePath; // Nullable
-    private Date expiryDate; // Nullable
+    private int postedByUserId;
+    private String targetRole; // ENUM('ALL', 'STUDENT', 'FACULTY', 'ADMIN')
+    private String imageFilePath; // For future use
+    private Date expiryDate;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    // For display purposes
+    private String postedByUsername;
 
     public Announcement() {
     }
@@ -96,8 +93,20 @@ public class Announcement implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getPostedByUsername() {
+        return postedByUsername;
+    }
+
+    public void setPostedByUsername(String postedByUsername) {
+        this.postedByUsername = postedByUsername;
+    }
+
     @Override
     public String toString() {
-        return "Announcement{" + "announcementId=" + announcementId + ", title='" + title + '\'' + '}';
+        return "Announcement{" +
+                "announcementId=" + announcementId +
+                ", title='" + title + '\'' +
+                ", targetRole='" + targetRole + '\'' +
+                '}';
     }
 }
