@@ -1,20 +1,23 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.AcademicTerm;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface AcademicTermDao {
-    void create(AcademicTerm academicTerm) throws DataAccessException;
+    AcademicTerm add(AcademicTerm academicTerm);
 
-    Optional<AcademicTerm> findById(int academicTermId) throws DataAccessException;
+    Optional<AcademicTerm> findById(int academicTermId);
 
-    List<AcademicTerm> findAll() throws DataAccessException;
+    Optional<AcademicTerm> findByName(String termName);
 
-    boolean update(AcademicTerm academicTerm) throws DataAccessException;
+    List<AcademicTerm> findAll();
 
-    boolean delete(int academicTermId) throws DataAccessException;
+    Optional<AcademicTerm> findCurrentTerm(LocalDate date); // Find term covering a specific date
+
+    void update(AcademicTerm academicTerm);
+
+    boolean delete(int academicTermId);
 }
-
