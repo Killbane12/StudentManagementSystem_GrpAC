@@ -1,20 +1,18 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing a Department (Faculty/School).
- */
-public class Department implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Department {
     private int departmentId;
     private String departmentName;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     public Department() {
+    }
+
+    public Department(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     // Getters and Setters
@@ -52,6 +50,9 @@ public class Department implements Serializable {
 
     @Override
     public String toString() {
-        return "Department{" + "departmentId=" + departmentId + ", departmentName='" + departmentName + '\'' + '}';
+        return "Department{" +
+                "departmentId=" + departmentId +
+                ", departmentName='" + departmentName + '\'' +
+                '}';
     }
 }

@@ -1,24 +1,20 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing a Grade given for an Enrollment.
- */
-public class Grade implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Grade {
     private int gradeId;
-    private int enrollmentId; // FK
+    private int enrollmentId;
     private String gradeValue;
     private String assessmentType;
-    private Integer gradedByFacultyId; // FK (nullable)
+    private Integer gradedByFacultyId; // Can be null
     private Timestamp gradedDate;
     private String remarks;
 
-    // Optional related object
-    // private Enrollment enrollment;
+    // For display purposes
+    private String studentName;
+    private String courseName;
+    private String facultyName;
 
     public Grade() {
     }
@@ -80,8 +76,37 @@ public class Grade implements Serializable {
         this.remarks = remarks;
     }
 
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+    }
+
+
     @Override
     public String toString() {
-        return "Grade{" + "gradeId=" + gradeId + ", enrollmentId=" + enrollmentId + ", gradeValue='" + gradeValue + '\'' + '}';
+        return "Grade{" +
+                "gradeId=" + gradeId +
+                ", enrollmentId=" + enrollmentId +
+                ", gradeValue='" + gradeValue + '\'' +
+                '}';
     }
 }
