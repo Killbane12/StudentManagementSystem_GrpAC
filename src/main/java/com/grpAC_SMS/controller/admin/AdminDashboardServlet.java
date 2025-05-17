@@ -10,6 +10,7 @@ import java.io.IOException;
  */
 @WebServlet(name = "AdminDashboardServlet", value = "/admin/dashboard")
 public class AdminDashboardServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO: Fetch overview data (counts, etc.) using DAOs
