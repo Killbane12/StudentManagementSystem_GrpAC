@@ -1,21 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-    // Simple redirect to the login page
-    String contextPath = request.getContextPath();
-    response.sendRedirect(contextPath + "/auth/login.jsp");
+    // Check if user is already logged in
+    if (session.getAttribute("loggedInUser") != null) {
+        com.grpAC_SMS.model.User user = (com.grpAC_SMS.model.User) session.getAttribute("loggedInUser");
+        String dashboardUrl = "";
+        switch (user.getRole()) {
+            case ADMIN:
+                dashboardUrl = request.getContextPath() + "/dashboard.jsp" /* or "/admin/dashboard.jsp"*/;
+                System.out.println(request.getContextPath());
+                break;
+            case FACULTY:
+                dashboardUrl = request.getContextPath() + "/faculty/dashboard.jsp";
+                break;
+            case STUDENT:
+                // Could be StudentDashboardServlet or student/dashboard.jsp directly if servlet pre-populates
+                dashboardUrl = request.getContextPath() + "/StudentDashboardServlet";
+                break;
+            default:
+                dashboardUrl = request.getContextPath() + "/auth/login.jsp"; // Fallback
+                break;
+        }
+        response.sendRedirect(dashboardUrl);
+    } else {
+        // If not logged in, redirect to login page
+        response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+    }
 %>
-<%-- This page will likely not be displayed due to the redirect.
-     Keeping a minimal HTML structure just in case. --%>
+<%-- This page will effectively be blank as it always redirects --%>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/img/favicon.ico" type="image/x-icon">
-    <meta charset="UTF-8">
-    <title>Welcome - Student Management System</title>
-    <style> body { font-family: sans-serif; padding: 20px; } </style>
+    <title>Redirecting... | Student Management System - Group_AC</title>
 </head>
 <body>
-<h1>Redirecting to Student Management System Login...</h1>
-<p>If you are not redirected automatically, <a href="${pageContext.request.contextPath}/auth/login.jsp">click here</a>.</p>
+<p>Please wait while you are being redirected...</p>
 </body>
 </html>

@@ -1,23 +1,23 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing Student Attendance for a Lecture Session.
- */
-public class Attendance implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Attendance {
     private int attendanceId;
-    private int studentId; // FK
-    private int lectureSessionId; // FK
+    private int studentId;
+    private int lectureSessionId;
     private Timestamp punchInTimestamp;
-    private boolean isPresent; // Renamed from 'status' for clarity with BOOLEAN type
-    private Integer recordedByFacultyId; // FK (nullable)
-    private String deviceId; // Nullable
+    private boolean isPresent;
+    private Integer recordedByFacultyId; // Can be null
+    private String deviceId; // Can be null
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    // For display purposes
+    private String studentName;
+    private String studentUniqueId;
+    private String courseName; // From LectureSession -> Course
+    private Timestamp sessionStartDateTime; // From LectureSession
 
     public Attendance() {
     }
@@ -57,7 +57,7 @@ public class Attendance implements Serializable {
 
     public boolean isPresent() {
         return isPresent;
-    } // Use isPresent() for boolean getter
+    }
 
     public void setPresent(boolean present) {
         isPresent = present;
@@ -95,8 +95,45 @@ public class Attendance implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public Timestamp getSessionStartDateTime() {
+        return sessionStartDateTime;
+    }
+
+    public void setSessionStartDateTime(Timestamp sessionStartDateTime) {
+        this.sessionStartDateTime = sessionStartDateTime;
+    }
+
+    public String getStudentUniqueId() {
+        return studentUniqueId;
+    }
+
+    public void setStudentUniqueId(String studentUniqueId) {
+        this.studentUniqueId = studentUniqueId;
+    }
+
     @Override
     public String toString() {
-        return "Attendance{" + "attendanceId=" + attendanceId + ", studentId=" + studentId + ", lectureSessionId=" + lectureSessionId + ", isPresent=" + isPresent + '}';
+        return "Attendance{" +
+                "attendanceId=" + attendanceId +
+                ", studentId=" + studentId +
+                ", lectureSessionId=" + lectureSessionId +
+                ", isPresent=" + isPresent +
+                '}';
     }
 }

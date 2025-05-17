@@ -1,14 +1,8 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing a User.
- */
-public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class User {
     private int userId;
     private String username;
     private String passwordHash;
@@ -18,8 +12,15 @@ public class User implements Serializable {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // Default constructor
     public User() {
+    }
+
+    public User(String username, String passwordHash, String email, Role role, boolean isActive) {
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.role = role;
+        this.isActive = isActive;
     }
 
     // Getters and Setters
@@ -89,6 +90,12 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "userId=" + userId + ", username='" + username + '\'' + ", role=" + role + '}';
+        return "User{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", isActive=" + isActive +
+                '}';
     }
 }
