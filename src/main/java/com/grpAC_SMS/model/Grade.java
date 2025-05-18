@@ -11,7 +11,6 @@ public class Grade {
     private Timestamp gradedDate;
     private String remarks;
 
-    // For display purposes
     private String studentName;
     private String courseName;
     private String facultyName;
@@ -19,7 +18,6 @@ public class Grade {
     public Grade() {
     }
 
-    // Getters and Setters
     public int getGradeId() {
         return gradeId;
     }
