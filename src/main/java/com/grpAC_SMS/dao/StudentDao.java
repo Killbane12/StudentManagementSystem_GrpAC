@@ -1,11 +1,14 @@
 package com.grpAC_SMS.dao;
 
+import com.grpAC_SMS.model.Course;
+import com.grpAC_SMS.model.Grade;
 import com.grpAC_SMS.model.Student;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface StudentDao {
+
     Student add(Student student);
 
     Optional<Student> findById(int studentId);
