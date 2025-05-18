@@ -15,6 +15,7 @@ public class Grade {
     private String studentName;
     private String courseName;
     private String facultyName;
+    private transient String courseCode;
 
     public Grade() {
     }
@@ -100,6 +101,14 @@ public class Grade {
         this.facultyName = facultyName;
     }
 
+
+    public String getCourseCode() { // <<< ADDED THIS
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) { // <<< ADDED THIS
+        this.courseCode = courseCode;
+    }
 
     @Override
     public String toString() {

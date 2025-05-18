@@ -2,11 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <header>
     <div class="header-content">
-        <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo" class="logo">
+        <a href="${pageContext.request.contextPath}/index.jsp"><img
+                src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo" class="logo"></a>
         <h1>Student Management System - NSBM</h1>
         <div class="user-info">
             <c:if test="${not empty sessionScope.loggedInUser}">
-                <span>Welcome, ${sessionScope.loggedInUser.username} (${sessionScope.loggedInUser.role})</span>
+                <span>Welcome, <c:out value="${sessionScope.loggedInUser.username}"/> (<c:out
+                        value="${sessionScope.loggedInUser.role}"/>)</span>
                 <a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a>
             </c:if>
         </div>

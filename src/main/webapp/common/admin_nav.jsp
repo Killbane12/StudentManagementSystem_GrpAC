@@ -1,10 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<li><a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Admin Dashboard</a></li>
+<li><a href="${pageContext.request.contextPath}/AdminDashboardServlet">Admin Dashboard</a>
+</li> <%-- Should go to servlet --%>
 <li><a href="${pageContext.request.contextPath}/ManageUsersServlet?action=list">Manage Users</a></li>
-<li><a href="${pageContext.request.contextPath}/admin/students_list.jsp">Manage Students</a>
-</li> <%-- Or /ManageStudentsServlet?action=list --%>
-<li><a href="${pageContext.request.contextPath}/admin/faculty_list.jsp">Manage Faculty</a>
-</li>   <%-- Or /ManageFacultyServlet?action=list --%>
+<li><a href="${pageContext.request.contextPath}/ManageStudentsServlet?action=list">Manage Students</a></li>
+<li><a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=list">Manage Faculty</a></li>
 <li><a href="${pageContext.request.contextPath}/ManageDepartmentsServlet?action=list">Departments</a></li>
 <li><a href="${pageContext.request.contextPath}/ManageProgramsServlet?action=list">Programs</a></li>
 <li><a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=list">Courses</a></li>

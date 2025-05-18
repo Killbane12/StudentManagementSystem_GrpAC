@@ -1,9 +1,9 @@
 package com.grpAC_SMS.dao.impl;
 
 import com.grpAC_SMS.dao.GradeDao;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Grade;
 import com.grpAC_SMS.util.DatabaseConnector;
-import com.grpAC_SMS.exception.DataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +16,14 @@ public class GradeDaoImpl implements GradeDao {
     private static final Logger logger = LoggerFactory.getLogger(GradeDaoImpl.class);
 
     private static final String SELECT_GRADE_DETAILS_SQL =
-            "SELECT g.*, CONCAT(s.first_name, ' ', s.last_name) as student_name, c.course_name, " +
+            "SELECT g.*, CONCAT(s.first_name, ' ', s.last_name) as student_name, c.course_name, c.course_code, " + // Added c.course_code
                     "CONCAT(f.first_name, ' ', f.last_name) as graded_by_faculty_name " +
                     "FROM Grades g " +
                     "JOIN Enrollments e ON g.enrollment_id = e.enrollment_id " +
                     "JOIN Students s ON e.student_id = s.student_id " +
-                    "JOIN Courses c ON e.course_id = c.course_id " +
+                    "JOIN Courses c ON e.course_id = c.course_id " + // This join provides course_code
                     "LEFT JOIN Faculty f ON g.graded_by_faculty_id = f.faculty_member_id ";
+
 
     @Override
     public Grade add(Grade grade) {
@@ -274,6 +275,7 @@ public class GradeDaoImpl implements GradeDao {
         Grade grade = mapRowToGrade(rs);
         grade.setStudentName(rs.getString("student_name"));
         grade.setCourseName(rs.getString("course_name"));
+        grade.setCourseCode(rs.getString("course_code"));
         grade.setFacultyName(rs.getString("graded_by_faculty_name"));
         return grade;
     }

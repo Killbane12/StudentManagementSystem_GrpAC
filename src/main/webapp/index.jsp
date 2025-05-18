@@ -7,18 +7,16 @@
         String dashboardUrl = "";
         switch (user.getRole()) {
             case ADMIN:
-                dashboardUrl = request.getContextPath() + "/dashboard.jsp" /* or "/admin/dashboard.jsp"*/;
-                System.out.println(request.getContextPath());
+                dashboardUrl = request.getContextPath() + "/AdminDashboardServlet"; // Point to servlet
                 break;
             case FACULTY:
-                dashboardUrl = request.getContextPath() + "/faculty/dashboard.jsp";
+                dashboardUrl = request.getContextPath() + "/FacultyDashboardServlet"; // Point to servlet
                 break;
             case STUDENT:
-                // Could be StudentDashboardServlet or student/dashboard.jsp directly if servlet pre-populates
-                dashboardUrl = request.getContextPath() + "/StudentDashboardServlet";
+                dashboardUrl = request.getContextPath() + "/StudentDashboardServlet"; // Point to servlet
                 break;
             default:
-                dashboardUrl = request.getContextPath() + "/auth/login.jsp"; // Fallback
+                dashboardUrl = request.getContextPath() + "/auth/login.jsp";
                 break;
         }
         response.sendRedirect(dashboardUrl);

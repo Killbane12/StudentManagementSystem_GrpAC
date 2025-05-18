@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%-- <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> --%> <%-- Only if fn:replace is used --%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +24,10 @@
             font-size: 0.9em;
             color: #555;
             margin-bottom: 10px;
+        }
+
+        .announcement-content p { /* Ensure <br> tags work by not overriding display too much */
+            white-space: pre-wrap; /* This also helps respect original newlines if <br> wasn't there */
         }
     </style>
 </head>
@@ -49,9 +53,7 @@
                         </c:if>
                     </div>
                     <div class="announcement-content">
-                            <%-- Naive way to handle newlines in text from DB --%>
-                        <c:set var="contentWithBreaks" value="${fn:replace(ann.content, '\\n', '<br/>')}"/>
-                        <p>${contentWithBreaks}</p>
+                        <p>${ann.contentHtml}</p>
                     </div>
                 </div>
             </c:forEach>

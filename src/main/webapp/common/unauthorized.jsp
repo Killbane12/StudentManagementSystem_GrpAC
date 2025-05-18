@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Unauthorized Access | Student Management System - Group_AC</title>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     <style>
         .container {
@@ -23,13 +24,16 @@
             <c:when test="${not empty sessionScope.loggedInUser}">
                 <c:choose>
                     <c:when test="${sessionScope.loggedInUser.role == 'ADMIN'}">
-                        <a href="${pageContext.request.contextPath}/admin/dashboard.jsp">Go to Admin Dashboard</a>
+                        <a href="${pageContext.request.contextPath}/AdminDashboardServlet">Go to Admin
+                                                                                           Dashboard</a> <%-- To Servlet --%>
                     </c:when>
                     <c:when test="${sessionScope.loggedInUser.role == 'FACULTY'}">
-                        <a href="${pageContext.request.contextPath}/faculty/dashboard.jsp">Go to Faculty Dashboard</a>
+                        <a href="${pageContext.request.contextPath}/FacultyDashboardServlet">Go to Faculty
+                                                                                             Dashboard</a> <%-- To Servlet --%>
                     </c:when>
                     <c:when test="${sessionScope.loggedInUser.role == 'STUDENT'}">
-                        <a href="${pageContext.request.contextPath}/student/dashboard.jsp">Go to Student Dashboard</a>
+                        <a href="${pageContext.request.contextPath}/StudentDashboardServlet">Go to Student
+                                                                                             Dashboard</a> <%-- To Servlet --%>
                     </c:when>
                     <c:otherwise>
                         <a href="${pageContext.request.contextPath}/auth/login.jsp">Go to Login</a>
