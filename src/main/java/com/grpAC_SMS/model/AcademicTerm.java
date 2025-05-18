@@ -1,15 +1,9 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
-/**
- * Model class representing an Academic Term (Semester).
- */
-public class AcademicTerm implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class AcademicTerm {
     private int academicTermId;
     private String termName;
     private Date startDate;
@@ -71,6 +65,9 @@ public class AcademicTerm implements Serializable {
 
     @Override
     public String toString() {
-        return "AcademicTerm{" + "academicTermId=" + academicTermId + ", termName='" + termName + '\'' + '}';
+        return "AcademicTerm{" +
+                "academicTermId=" + academicTermId +
+                ", termName='" + termName + '\'' +
+                '}';
     }
 }

@@ -1,33 +1,28 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-/**
- * Model class representing a specific Lecture Session instance.
- */
-public class LectureSession implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class LectureSession {
     private int lectureSessionId;
-    private int courseId; // FK
-    private Integer facultyMemberId; // FK (nullable)
-    private int academicTermId; // FK
-    private Integer locationId; // FK (nullable)
-    private Timestamp sessionStartDatetime;
-    private Timestamp sessionEndDatetime;
+    private int courseId;
+    private Integer facultyMemberId; // Can be null
+    private int academicTermId;
+    private Integer locationId; // Can be null
+    private LocalDateTime sessionStartDatetime;
+    private LocalDateTime sessionEndDatetime;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // Optional related objects
-    // private Course course;
-    // private Faculty faculty;
-    // private Location location;
+    private String courseName;
+    private String facultyName;
+    private String termName;
+    private String locationName;
+
 
     public LectureSession() {
     }
 
-    // Getters and Setters
     public int getLectureSessionId() {
         return lectureSessionId;
     }
@@ -68,19 +63,19 @@ public class LectureSession implements Serializable {
         this.locationId = locationId;
     }
 
-    public Timestamp getSessionStartDatetime() {
+    public LocalDateTime getSessionStartDatetime() {
         return sessionStartDatetime;
     }
 
-    public void setSessionStartDatetime(Timestamp sessionStartDatetime) {
+    public void setSessionStartDatetime(LocalDateTime sessionStartDatetime) {
         this.sessionStartDatetime = sessionStartDatetime;
     }
 
-    public Timestamp getSessionEndDatetime() {
+    public LocalDateTime getSessionEndDatetime() {
         return sessionEndDatetime;
     }
 
-    public void setSessionEndDatetime(Timestamp sessionEndDatetime) {
+    public void setSessionEndDatetime(LocalDateTime sessionEndDatetime) {
         this.sessionEndDatetime = sessionEndDatetime;
     }
 
@@ -100,8 +95,45 @@ public class LectureSession implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+    }
+
+    public String getTermName() {
+        return termName;
+    }
+
+    public void setTermName(String termName) {
+        this.termName = termName;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+
     @Override
     public String toString() {
-        return "LectureSession{" + "lectureSessionId=" + lectureSessionId + ", courseId=" + courseId + '}';
+        return "LectureSession{" +
+                "lectureSessionId=" + lectureSessionId +
+                ", courseId=" + courseId +
+                ", sessionStartDatetime=" + sessionStartDatetime +
+                '}';
     }
 }

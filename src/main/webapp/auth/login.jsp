@@ -64,7 +64,6 @@
             <input type="password" id="password" name="password" required placeholder="Enter password">
         </div>
         <button type="submit">Login</button>
-        <button type="button" onclick="location.href='${pageContext.request.contextPath}/RegisterServlet'">Register</button>
     </form>
 </main>
 

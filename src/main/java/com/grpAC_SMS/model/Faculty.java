@@ -1,25 +1,23 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing a Faculty Member.
- */
-public class Faculty implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Faculty {
     private int facultyMemberId;
-    private Integer userId; // Foreign Key ID (nullable)
+    private Integer userId; // FK to Users, can be null initially
     private String facultyUniqueId;
     private String firstName;
     private String lastName;
-    private int departmentId; // Foreign Key ID
+    private int departmentId; // FK to Departments
     private String officeLocation;
     private String contactEmail;
     private String phoneNumber;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    // For display purposes
+    private String departmentName;
+    private String userEmail; // from Users table if linked
 
     public Faculty() {
     }
@@ -113,8 +111,34 @@ public class Faculty implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+
     @Override
     public String toString() {
-        return "Faculty{" + "facultyMemberId=" + facultyMemberId + ", name='" + firstName + " " + lastName + '\'' + '}';
+        return "Faculty{" +
+                "facultyMemberId=" + facultyMemberId +
+                ", facultyUniqueId='" + facultyUniqueId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

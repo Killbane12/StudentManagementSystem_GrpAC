@@ -1,17 +1,11 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing a Location (Lecture Hall, Lab).
- */
-public class Location implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Location {
     private int locationId;
     private String locationName;
-    private Integer capacity; // Use Integer to allow null
+    private Integer capacity;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -61,6 +55,9 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "Location{" + "locationId=" + locationId + ", locationName='" + locationName + '\'' + '}';
+        return "Location{" +
+                "locationId=" + locationId +
+                ", locationName='" + locationName + '\'' +
+                '}';
     }
 }
