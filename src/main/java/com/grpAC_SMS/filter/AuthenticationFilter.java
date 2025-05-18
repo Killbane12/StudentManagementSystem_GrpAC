@@ -1,6 +1,5 @@
 package com.grpAC_SMS.filter;
 
-import com.grpAC_SMS.model.Role;
 import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.util.ApplicationConstants;
 import jakarta.servlet.*;
@@ -8,72 +7,87 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * Ensures user is authenticated before accessing protected resources.
- */
-@WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/admin/*", "/student/*", "/faculty/*"})
+@WebFilter("/*") // Apply to all requests initially, then refine paths
 public class AuthenticationFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+    private static final Set<String> ALLOWED_PATHS = new HashSet<>(Arrays.asList(
+            "/auth/login.jsp",
+            "/LoginServlet",
+            "/assets/", // Allow access to CSS, JS, images
+            "/index.jsp" // Or redirect from index.jsp to login
+    ));
+    private static final Set<String> PUBLIC_SERVLET_PATHS = new HashSet<>(Arrays.asList(
+            "/LoginServlet", "/LogoutServlet" // LogoutServlet should still be accessible to logged-in users
+    ));
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("AuthenticationFilter Initialized");
-    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        HttpSession session = httpRequest.getSession(false);
+        HttpSession session = httpRequest.getSession(false); // Don't create session if it doesn't exist
 
-        String loginURI = httpRequest.getContextPath() + "/auth/login.jsp";
-        String loginServletPath = httpRequest.getContextPath() + "/LoginServlet"; // Match @WebServlet value
+        String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
+        String servletPath = httpRequest.getServletPath(); // More reliable for servlet mappings
 
-        boolean isLoggedIn = (session != null && session.getAttribute(ApplicationConstants.LOGGED_IN_USER_SESSION_ATTR) != null);
-        boolean isLoginRequest = httpRequest.getRequestURI().equals(loginURI) || httpRequest.getRequestURI().equals(loginServletPath);
-        boolean isStaticResource = httpRequest.getRequestURI().startsWith(httpRequest.getContextPath() + "/assets/");
+        logger.debug("AuthFilter: Processing request for path: {}, servletPath: {}", path, servletPath);
 
-        if (isLoggedIn || isLoginRequest || isStaticResource) {
-            if (isLoggedIn && httpRequest.getRequestURI().equals(loginURI)) {
-                // If logged in, redirect from login page to dashboard
-                User user = (User) session.getAttribute(ApplicationConstants.LOGGED_IN_USER_SESSION_ATTR);
-                redirectToDashboard(user.getRole(), httpResponse, httpRequest.getContextPath());
-            } else {
-                // Logged in, or accessing login page/servlet, or static resource: Allow access
-                chain.doFilter(request, response);
+
+        boolean isLoggedIn = (session != null && session.getAttribute(ApplicationConstants.SESSION_USER) != null);
+
+        // Check if the path starts with any of the allowed prefixes (e.g. /assets/)
+        boolean isAllowedPath = ALLOWED_PATHS.stream().anyMatch(path::startsWith) || PUBLIC_SERVLET_PATHS.contains(servletPath);
+
+
+        if (isLoggedIn || isAllowedPath) {
+            if (isLoggedIn && (servletPath.equals("/LoginServlet") || path.equals("/auth/login.jsp"))) {
+                User user = (User) session.getAttribute(ApplicationConstants.SESSION_USER);
+                logger.debug("User already logged in, redirecting from login page to dashboard.");
+                redirectToDashboard(user, httpRequest, httpResponse);
+                return;
             }
+            logger.debug("AuthFilter: Access granted for path: {}", path);
+            chain.doFilter(request, response); // User is logged in or accessing a public page
         } else {
-            // Not logged in and trying to access protected resource
-            System.out.println("AuthenticationFilter: Access denied (not logged in). Redirecting to login.");
-            httpResponse.sendRedirect(loginURI);
+            logger.warn("AuthFilter: Access denied for path: {}. User not logged in. Redirecting to login.", path);
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "/auth/login.jsp");
         }
     }
 
-    private void redirectToDashboard(Role role, HttpServletResponse response, String contextPath) throws IOException {
-        String dashboardUrl = contextPath;
-        switch (role) {
+    private void redirectToDashboard(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String contextPath = request.getContextPath();
+        switch (user.getRole()) {
             case ADMIN:
-                dashboardUrl += "/admin/dashboard";
-                break; // Use servlet path
+                response.sendRedirect(contextPath + "/admin/dashboard.jsp");
+                break;
             case FACULTY:
-                dashboardUrl += "/faculty/dashboard";
-                break; // Use servlet path
+                response.sendRedirect(contextPath + "/faculty/dashboard.jsp");
+                break;
             case STUDENT:
-                dashboardUrl += "/student/dashboard";
-                break; // Use servlet path
+                response.sendRedirect(contextPath + "/student/dashboard.jsp");
+                break;
             default:
-                dashboardUrl += "/auth/login.jsp"; // Fallback
+                response.sendRedirect(contextPath + "/auth/login.jsp"); // Fallback
+                break;
         }
-        response.sendRedirect(dashboardUrl);
     }
 
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        logger.info("AuthenticationFilter initialized.");
+    }
 
     @Override
     public void destroy() {
-        System.out.println("AuthenticationFilter Destroyed");
+        logger.info("AuthenticationFilter destroyed.");
     }
 }

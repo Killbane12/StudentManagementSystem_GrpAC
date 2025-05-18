@@ -1,27 +1,34 @@
 package com.grpAC_SMS.dao;
 
 import com.grpAC_SMS.model.Course;
-import com.grpAC_SMS.model.Department;
-import com.grpAC_SMS.model.Program;
-import com.grpAC_SMS.model.Student;
-import com.grpAC_SMS.exception.DataAccessException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
-/**
- * DAO interface for course-related database operations
- */
 public interface CourseDao {
+    Course add(Course course);
 
-    // Get program details for a student
-    Program getStudentProgram(int studentId);
+    Optional<Course> findById(int courseId);
 
-    // Get department by ID
-    Department getDepartmentById(int departmentId);
+    Optional<Course> findByCode(String courseCode);
 
-    // Get all courses for a program
-    List<Course> getCoursesByProgramId(int programId);
+    List<Course> findAll();
 
+    List<Course> findAllWithDetails(); // For display with program and department names
+
+    List<Course> findByProgramId(int programId);
+
+    List<Course> findByDepartmentId(int departmentId);
+
+    List<Course> findCoursesByStudentIdAndTermId(int studentId, int termId); // For student dashboard
+
+    List<Course> findCoursesByFacultyIdAndTermId(int facultyMemberId, int termId); // For faculty dashboard
+
+    void update(Course course);
+
+    boolean delete(int courseId);
+
+    long countTotalCourses();
+
+    void assignFacultyToCourseInSession(int courseId, int facultyMemberId, int lectureSessionId); // Not here, belongs to LectureSessionDao
 }

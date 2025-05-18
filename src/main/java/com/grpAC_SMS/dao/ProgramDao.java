@@ -1,19 +1,24 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Program;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProgramDao {
-    void create(Program program) throws DataAccessException;
+    Program add(Program program);
 
-    Optional<Program> findById(int programId) throws DataAccessException;
+    Optional<Program> findById(int programId);
 
-    List<Program> findAll() throws DataAccessException;
+    Optional<Program> findByName(String name);
 
-    boolean update(Program program) throws DataAccessException;
+    List<Program> findAll();
 
-    boolean delete(int programId) throws DataAccessException;
+    List<Program> findAllWithDetails(); // For display with department name
+
+    List<Program> findByDepartmentId(int departmentId);
+
+    void update(Program program);
+
+    boolean delete(int programId);
 }

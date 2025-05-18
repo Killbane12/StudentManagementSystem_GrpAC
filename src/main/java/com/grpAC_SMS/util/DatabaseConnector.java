@@ -1,67 +1,55 @@
 package com.grpAC_SMS.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * Utility class for managing Database Connections using properties file.
- */
 public class DatabaseConnector {
-
-    private static final String PROPERTIES_FILE = "db/database.properties";
-    private static final Properties props = new Properties();
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseConnector.class);
+    private static final Properties properties = new Properties();
+    private static final String DB_PROPERTIES_FILE = "db/database.properties";
 
     static {
-        System.out.println("Attempting to load database properties...");
-        try (InputStream input = DatabaseConnector.class.getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+        try (InputStream input = DatabaseConnector.class.getClassLoader().getResourceAsStream(DB_PROPERTIES_FILE)) {
             if (input == null) {
-                System.err.println("FATAL ERROR: Unable to find " + PROPERTIES_FILE);
-            } else {
-                props.load(input);
-                Class.forName(props.getProperty("db.driver")); // Ensure driver is loaded
-                System.out.println("Database properties loaded successfully.");
+                logger.error("Sorry, unable to find " + DB_PROPERTIES_FILE);
+                throw new RuntimeException("Database properties file not found: " + DB_PROPERTIES_FILE);
             }
-        } catch (Exception e) {
-            System.err.println("FATAL ERROR: Failed to load database properties or driver.");
-            e.printStackTrace(); // Print stack trace for debugging during development
+            properties.load(input);
+            Class.forName(properties.getProperty("db.driver"));
+            logger.info("Database driver loaded successfully.");
+        } catch (IOException ex) {
+            logger.error("Error loading database properties.", ex);
+            throw new RuntimeException("Error loading database properties.", ex);
+        } catch (ClassNotFoundException ex) {
+            logger.error("Database driver class not found.", ex);
+            throw new RuntimeException("Database driver class not found.", ex);
         }
     }
 
-    // Private constructor to prevent instantiation
-    private DatabaseConnector() {
-    }
-
-    /**
-     * Gets a database connection.
-     *
-     * @return A Connection object.
-     * @throws SQLException if a database access error occurs or the URL is null, or properties not loaded.
-     */
     public static Connection getConnection() throws SQLException {
-        if (props.isEmpty()) {
-            throw new SQLException("Database properties not loaded. Cannot create connection.");
-        }
-        return DriverManager.getConnection(
-                props.getProperty("db.url"),
-                props.getProperty("db.username"),
-                props.getProperty("db.password")
+        Connection connection = DriverManager.getConnection(
+                properties.getProperty("db.url"),
+                properties.getProperty("db.username"),
+                properties.getProperty("db.password")
         );
+        logger.debug("Database connection established.");
+        return connection;
     }
 
-    /**
-     * Closes a JDBC resource quietly (Connection, Statement, ResultSet).
-     *
-     * @param resource The AutoCloseable resource to close.
-     */
-    public static void closeQuietly(AutoCloseable resource) {
-        if (resource != null) {
+    public static void closeConnection(Connection connection) {
+        if (connection != null) {
             try {
-                resource.close();
-            } catch (Exception e) {
-                System.err.println("Warning: Failed to close resource quietly. " + e.getMessage());
+                connection.close();
+                logger.debug("Database connection closed.");
+            } catch (SQLException e) {
+                logger.error("Error closing database connection.", e);
             }
         }
     }

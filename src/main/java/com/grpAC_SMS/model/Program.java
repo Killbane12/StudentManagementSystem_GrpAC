@@ -1,24 +1,19 @@
 package com.grpAC_SMS.model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-/**
- * Model class representing an Academic Program (Degree/Diploma).
- */
-public class Program implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Program {
     private int programId;
     private String programName;
-    private int departmentId; // Foreign Key ID
+    private int departmentId; // FK to Departments
     private String description;
     private Integer durationYears; // Use Integer to allow null
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // Optional: Include Department object for relationship mapping
-    // private Department department;
+    // For display purposes
+    private String departmentName;
+
 
     public Program() {
     }
@@ -80,8 +75,21 @@ public class Program implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+
     @Override
     public String toString() {
-        return "Program{" + "programId=" + programId + ", programName='" + programName + '\'' + '}';
+        return "Program{" +
+                "programId=" + programId +
+                ", programName='" + programName + '\'' +
+                ", departmentId=" + departmentId +
+                '}';
     }
 }

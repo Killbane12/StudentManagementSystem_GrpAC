@@ -1,53 +1,63 @@
 package com.grpAC_SMS.util;
 
-/**
- * Utility class for common input validation tasks.
- */
+import java.util.regex.Pattern;
+
 public class InputValidator {
 
-    // Private constructor
-    private InputValidator() {
+    // Basic email pattern
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 
-    /**
-     * Checks if a string is null, empty, or contains only whitespace.
-     *
-     * @param value The string to check.
-     * @return true if the string is null or empty, false otherwise.
-     */
-    public static boolean isNullOrBlank(String value) {
-        return value == null || value.trim().isEmpty();
+    public static boolean isValidEmail(String email) {
+        if (isNullOrEmpty(email)) {
+            return false;
+        }
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 
-    /**
-     * Basic check for email format.
-     *
-     * @param email The string to check.
-     * @return true if the string looks like a plausible email address, false otherwise.
-     */
-    public static boolean isValidEmailFormat(String email) {
-        if (isNullOrBlank(email)) return false;
-        // Simple regex - consider a more comprehensive one if needed
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        return email.matches(emailRegex);
+    public static boolean isValidPassword(String password) {
+        // Example: At least 8 characters, one uppercase, one lowercase, one digit
+        // For this project, we might just check for non-emptiness and length.
+        if (isNullOrEmpty(password)) {
+            return false;
+        }
+        return password.length() >= 6; // Simple length check
     }
 
-
-    // Add other common validation methods (e.g., date format, length check) as needed
-
-    /**
-     * Checks if a string represents a valid integer.
-     *
-     * @param value The string to check.
-     * @return true if the string can be parsed as an integer, false otherwise.
-     */
-    public static boolean isValidInteger(String value) {
-        if (isNullOrBlank(value)) return false;
+    public static boolean isInteger(String str) {
+        if (isNullOrEmpty(str)) return false;
         try {
-            Integer.parseInt(value);
+            Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static boolean isPositiveInteger(String str) {
+        if (!isInteger(str)) return false;
+        return Integer.parseInt(str) > 0;
+    }
+
+    public static boolean isWithinRange(String str, int min, int max) {
+        if (!isInteger(str)) return false;
+        int val = Integer.parseInt(str);
+        return val >= min && val <= max;
+    }
+
+    public static boolean isValidDate(String date) {
+        // Basic check for YYYY-MM-DD format
+        if (isNullOrEmpty(date)) return false;
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+
+    public static boolean isValidDateTimeLocal(String dateTime) {
+        // Basic check for YYYY-MM-DDTHH:MM format
+        if (isNullOrEmpty(dateTime)) return false;
+        return dateTime.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}");
     }
 }

@@ -1,19 +1,20 @@
 package com.grpAC_SMS.dao;
 
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Department;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface DepartmentDao {
-    void create(Department department) throws DataAccessException;
+    Department add(Department department);
 
-    Optional<Department> findById(int departmentId) throws DataAccessException;
+    Optional<Department> findById(int departmentId);
 
-    List<Department> findAll() throws DataAccessException;
+    Optional<Department> findByName(String name);
 
-    boolean update(Department department) throws DataAccessException;
+    List<Department> findAll();
 
-    boolean delete(int departmentId) throws DataAccessException;
+    void update(Department department);
+
+    boolean delete(int departmentId); // Return boolean for success
 }
