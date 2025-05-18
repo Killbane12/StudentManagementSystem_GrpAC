@@ -314,7 +314,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         String enrolledStudentsSql = "SELECT student_id FROM Enrollments WHERE course_id = ? AND academic_term_id = ? AND status = 'ENROLLED'";
         // Query to get all lecture sessions for this course in this term
         String totalCourseSessionsSql = "SELECT lecture_session_id FROM LectureSessions WHERE course_id = ? AND academic_term_id = ?";
-        // Query to count how many sessions a student was present for
+        // Query to count how many sessions a student was present
         String presentCountSql = "SELECT COUNT(DISTINCT lecture_session_id) FROM Attendance " +
                 "WHERE student_id = ? AND lecture_session_id IN (SELECT lecture_session_id FROM LectureSessions WHERE course_id = ? AND academic_term_id = ?) " +
                 "AND is_present = TRUE";

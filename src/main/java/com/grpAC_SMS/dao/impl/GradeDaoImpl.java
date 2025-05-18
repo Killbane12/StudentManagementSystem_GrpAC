@@ -15,7 +15,7 @@ import java.util.Optional;
 public class GradeDaoImpl implements GradeDao {
     private static final Logger logger = LoggerFactory.getLogger(GradeDaoImpl.class);
 
-    // This big SQL query is very important! It join many tables together for get detailed grade info
+
     // Student name, course name and faculty name all in one query - very efficient!
     private static final String SELECT_GRADE_DETAILS_SQL =
             "SELECT g.*, CONCAT(s.first_name, ' ', s.last_name) as student_name, c.course_name, " +
@@ -35,7 +35,7 @@ public class GradeDaoImpl implements GradeDao {
             pstmt.setInt(1, grade.getEnrollmentId());
             pstmt.setString(2, grade.getGradeValue());
             pstmt.setString(3, grade.getAssessmentType());
-            // Special handling for null faculty ID - very important for when system generate grade automatically!
+            // Special handling for null faculty ID
             if (grade.getGradedByFacultyId() != null) pstmt.setInt(4, grade.getGradedByFacultyId());
             else pstmt.setNull(4, Types.INTEGER);
             pstmt.setString(5, grade.getRemarks());
@@ -55,7 +55,7 @@ public class GradeDaoImpl implements GradeDao {
             return grade;
         } catch (SQLException e) {
             logger.error("Error adding grade for enrollment {}: {}", grade.getEnrollmentId(), e.getMessage());
-            // Maybe we should add unique constraint for enrollment+assessment_type in future!
+            //  unique constraint for enrollment+assessment_type
             throw new DataAccessException("Error adding grade.", e);
         }
     }
@@ -96,8 +96,7 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findAllWithDetails() {
-        // This method is super useful! Different from regular findAll - it include student and course name
-        // Very good for showing in UI without need many separate database calls!
+
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "ORDER BY g.graded_date DESC, s.last_name, c.course_name";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -115,7 +114,7 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findByEnrollmentId(int enrollmentId) {
-        // Useful for transcript - get all grades for one student in one course
+        // get all grades for one student in one course
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE g.enrollment_id = ? ORDER BY g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -134,7 +133,7 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findByStudentId(int studentId) {
-        // Very important for student portal! Show all grades from all courses for one student
+
         // Order by course name make it easy to read for student!
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE e.student_id = ? ORDER BY c.course_name, g.assessment_type";
@@ -154,7 +153,7 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findByCourseId(int courseId) { // All grades for a course (across all students/terms)
-        // Good function for academic analysis! Can see all grades ever given in one course
+        // Can see all grades ever given in one course
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE e.course_id = ? ORDER BY s.last_name, g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -173,14 +172,11 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findGradesForFacultyCourse(int facultyMemberId, int courseId, int termId) {
-        // This function little bit tricky! Faculty-grade relationship is complex
-        // Not direct link between faculty and grade in database structure
-        // Maybe need redesign in future - this implementation not perfect!
+
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL +
                 "WHERE e.course_id = ? AND e.academic_term_id = ? " +
-                // Note: we can add this filter if faculty should only see their own grades:
-                // AND (g.graded_by_faculty_id = ? OR g.graded_by_faculty_id IS NULL)
+
                 "ORDER BY s.last_name, g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -200,8 +196,8 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public Optional<Grade> findByEnrollmentAndAssessmentType(int enrollmentId, String assessmentType) {
-        // Very specific search! Find exact grade for specific test type
-        // Like "find me final exam grade for this student in this course"
+        // Find exact grade for specific test type
+
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE g.enrollment_id = ? AND g.assessment_type = ?";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -250,8 +246,7 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public boolean delete(int gradeId) {
-        // This function return boolean - let caller know if delete succeed or not
-        // Very good design pattern - more clear than just throw exception!
+
         String sql = "DELETE FROM Grades WHERE grade_id = ?";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

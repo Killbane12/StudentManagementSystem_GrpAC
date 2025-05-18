@@ -50,7 +50,7 @@ public class FacultyDaoImpl implements FacultyDao {
             return faculty;
         } catch (SQLException e) {
             logger.error("Error adding faculty {}: {}", faculty.getFacultyUniqueId(), e.getMessage());
-            // Special handling for unique constraint violations
+            //  handling for unique constraint violations
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("faculty_unique_id")) {
                 throw new DataAccessException("Faculty Unique ID '" + faculty.getFacultyUniqueId() + "' already exists.", e);
             }
