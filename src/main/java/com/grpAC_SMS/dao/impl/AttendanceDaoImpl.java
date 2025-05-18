@@ -18,6 +18,7 @@ import java.util.Optional;
 public class AttendanceDaoImpl implements AttendanceDao {
     private static final Logger logger = LoggerFactory.getLogger(AttendanceDaoImpl.class);
 
+    // Complex join query used for retrieving attendance with additional details
     private static final String SELECT_ATTENDANCE_DETAILS_SQL =
             "SELECT a.*, CONCAT(s.first_name, ' ', s.last_name) as student_name, s.student_unique_id, " +
                     "c.course_name, ls.session_start_datetime " +
@@ -36,6 +37,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             pstmt.setInt(2, attendance.getLectureSessionId());
             pstmt.setTimestamp(3, attendance.getPunchInTimestamp());
             pstmt.setBoolean(4, attendance.isPresent());
+            // Handle nullable faculty ID
             if (attendance.getRecordedByFacultyId() != null) pstmt.setInt(5, attendance.getRecordedByFacultyId());
             else pstmt.setNull(5, Types.INTEGER);
             pstmt.setString(6, attendance.getDeviceId());
@@ -44,6 +46,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             if (affectedRows == 0) {
                 throw new SQLException("Creating attendance record failed, no rows affected.");
             }
+            // Retrieve auto-generated attendance ID
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     attendance.setAttendanceId(generatedKeys.getInt(1));
@@ -56,6 +59,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         } catch (SQLException e) {
             logger.error("Error adding attendance for student {}, session {}: {}",
                     attendance.getStudentId(), attendance.getLectureSessionId(), e.getMessage());
+            // Special handling for unique constraint violations
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("uk_student_lecture_session")) {
                 throw new DataAccessException("Attendance record already exists for this student and lecture session.", e);
             }
@@ -119,6 +123,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public List<Attendance> findAllWithDetails() {
         List<Attendance> attendances = new ArrayList<>();
+        // Extended query with joins for detailed attendance listing
         String sql = SELECT_ATTENDANCE_DETAILS_SQL + "ORDER BY a.punch_in_timestamp DESC, s.last_name";
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -137,6 +142,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public List<Attendance> findByStudentId(int studentId) {
         List<Attendance> attendances = new ArrayList<>();
+        // Get student's attendance history with course details
         String sql = SELECT_ATTENDANCE_DETAILS_SQL + "WHERE a.student_id = ? ORDER BY ls.session_start_datetime DESC";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -155,6 +161,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public List<Attendance> findByLectureSessionId(int lectureSessionId) {
         List<Attendance> attendances = new ArrayList<>();
+        // Get attendance records for specific lecture session
         String sql = SELECT_ATTENDANCE_DETAILS_SQL + "WHERE a.lecture_session_id = ? ORDER BY s.last_name";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -173,6 +180,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     @Override
     public List<Attendance> findByStudentAndCourse(int studentId, int courseId) {
         List<Attendance> attendances = new ArrayList<>();
+        // Find student's attendance pattern for specific course
         String sql = SELECT_ATTENDANCE_DETAILS_SQL +
                 "WHERE a.student_id = ? AND ls.course_id = ? " +
                 "ORDER BY ls.session_start_datetime DESC";
@@ -202,6 +210,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             pstmt.setInt(2, attendance.getLectureSessionId());
             pstmt.setTimestamp(3, attendance.getPunchInTimestamp());
             pstmt.setBoolean(4, attendance.isPresent());
+            // Nullable faculty ID handling
             if (attendance.getRecordedByFacultyId() != null) pstmt.setInt(5, attendance.getRecordedByFacultyId());
             else pstmt.setNull(5, Types.INTEGER);
             pstmt.setString(6, attendance.getDeviceId());
@@ -215,6 +224,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             }
         } catch (SQLException e) {
             logger.error("Error updating attendance record with ID {}: {}", attendance.getAttendanceId(), e.getMessage());
+            // Check for unique constraint violation during update
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("uk_student_lecture_session")) {
                 throw new DataAccessException("Cannot update: Attendance record already exists for this student and lecture session under a different attendance ID.", e);
             }
@@ -244,11 +254,13 @@ public class AttendanceDaoImpl implements AttendanceDao {
 
     @Override
     public double calculateAttendancePercentage(int studentId, int courseId, int termId) {
+        // First query gets total lecture sessions for the student's enrollment
         String sqlTotalSessions = "SELECT COUNT(DISTINCT ls.lecture_session_id) " +
                 "FROM LectureSessions ls " +
                 "JOIN Enrollments e ON ls.course_id = e.course_id AND ls.academic_term_id = e.academic_term_id " +
                 "WHERE e.student_id = ? AND ls.course_id = ? AND ls.academic_term_id = ? AND e.status = 'ENROLLED'";
 
+        // Second query counts sessions where student was present
         String sqlPresentSessions = "SELECT COUNT(DISTINCT a.lecture_session_id) " +
                 "FROM Attendance a " +
                 "JOIN LectureSessions ls ON a.lecture_session_id = ls.lecture_session_id " +
@@ -280,6 +292,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
                 }
             }
 
+            // Avoid division by zero
             if (totalSessions == 0) {
                 return 0.0; // Avoid division by zero, or could be 100% if no sessions implies full attendance.
             }
@@ -297,16 +310,17 @@ public class AttendanceDaoImpl implements AttendanceDao {
         Map<Integer, Long[]> studentAttendanceCounts = new HashMap<>();
         // Long[] will be [present_count, total_sessions_student_enrolled_for]
 
-        // Get all students enrolled in the course for the term
+        // Query to find all students enrolled in this course
         String enrolledStudentsSql = "SELECT student_id FROM Enrollments WHERE course_id = ? AND academic_term_id = ? AND status = 'ENROLLED'";
-        // Get total sessions for the course in the term
+        // Query to get all lecture sessions for this course in this term
         String totalCourseSessionsSql = "SELECT lecture_session_id FROM LectureSessions WHERE course_id = ? AND academic_term_id = ?";
-        // Get present count for a student for these sessions
+        // Query to count how many sessions a student was present for
         String presentCountSql = "SELECT COUNT(DISTINCT lecture_session_id) FROM Attendance " +
                 "WHERE student_id = ? AND lecture_session_id IN (SELECT lecture_session_id FROM LectureSessions WHERE course_id = ? AND academic_term_id = ?) " +
                 "AND is_present = TRUE";
 
         try (Connection conn = DatabaseConnector.getConnection()) {
+            // First get all lecture sessions for this course
             List<Integer> lectureSessionIdsForCourse = new ArrayList<>();
             try (PreparedStatement pstmtTotalCourseSessions = conn.prepareStatement(totalCourseSessionsSql)) {
                 pstmtTotalCourseSessions.setInt(1, courseId);
@@ -319,6 +333,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
             long totalSessionsInCourse = lectureSessionIdsForCourse.size();
             if (totalSessionsInCourse == 0) return studentAttendanceCounts; // No sessions, no attendance
 
+            // Get all enrolled students and their attendance counts
             try (PreparedStatement pstmtEnrolled = conn.prepareStatement(enrolledStudentsSql)) {
                 pstmtEnrolled.setInt(1, courseId);
                 pstmtEnrolled.setInt(2, termId);
@@ -336,7 +351,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
                             presentCount = rsPresent.getLong(1);
                         }
                     }
-                    // Assuming student is considered for all sessions of the course they are enrolled in.
+                    // Store both present count and total sessions for percentage calculation later
                     studentAttendanceCounts.put(studentId, new Long[]{presentCount, totalSessionsInCourse});
                 }
             }
@@ -347,6 +362,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         return studentAttendanceCounts;
     }
 
+    // Basic mapper for attendance record only
     private Attendance mapRowToAttendance(ResultSet rs) throws SQLException {
         Attendance attendance = new Attendance();
         attendance.setAttendanceId(rs.getInt("attendance_id"));
@@ -361,6 +377,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
         return attendance;
     }
 
+    // Enhanced mapper with joined table data for detailed views
     private Attendance mapRowToAttendanceWithDetails(ResultSet rs) throws SQLException {
         Attendance attendance = mapRowToAttendance(rs);
         attendance.setStudentName(rs.getString("student_name"));

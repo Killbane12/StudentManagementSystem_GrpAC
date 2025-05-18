@@ -22,6 +22,7 @@ public class FacultyDaoImpl implements FacultyDao {
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            // Handle nullable user_id (faculty might not have system access yet)
             if (faculty.getUserId() != null) pstmt.setInt(1, faculty.getUserId());
             else pstmt.setNull(1, Types.INTEGER);
 
@@ -37,6 +38,7 @@ public class FacultyDaoImpl implements FacultyDao {
             if (affectedRows == 0) {
                 throw new SQLException("Creating faculty member failed, no rows affected.");
             }
+            // Retrieve the auto-generated ID
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     faculty.setFacultyMemberId(generatedKeys.getInt(1));
@@ -48,6 +50,7 @@ public class FacultyDaoImpl implements FacultyDao {
             return faculty;
         } catch (SQLException e) {
             logger.error("Error adding faculty {}: {}", faculty.getFacultyUniqueId(), e.getMessage());
+            // Special handling for unique constraint violations
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("faculty_unique_id")) {
                 throw new DataAccessException("Faculty Unique ID '" + faculty.getFacultyUniqueId() + "' already exists.", e);
             }
@@ -88,9 +91,11 @@ public class FacultyDaoImpl implements FacultyDao {
         return querySingleFaculty(sql, facultyUniqueId);
     }
 
+    // Helper method to reduce code duplication in similar finder methods
     private Optional<Faculty> querySingleFaculty(String sql, Object param) {
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // Handle different parameter types (Integer or String)
             if (param instanceof Integer) {
                 pstmt.setInt(1, (Integer) param);
             } else if (param instanceof String) {
@@ -110,6 +115,7 @@ public class FacultyDaoImpl implements FacultyDao {
     @Override
     public List<Faculty> findAll() {
         List<Faculty> facultyList = new ArrayList<>();
+        // Basic query without joining related tables
         String sql = "SELECT * FROM Faculty ORDER BY last_name, first_name";
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -127,6 +133,7 @@ public class FacultyDaoImpl implements FacultyDao {
     @Override
     public List<Faculty> findAllWithDetails() {
         List<Faculty> facultyList = new ArrayList<>();
+        // Enhanced query with department and user details
         String sql = "SELECT f.*, d.department_name, u.email as user_email " +
                 "FROM Faculty f " +
                 "JOIN Departments d ON f.department_id = d.department_id " +
@@ -153,6 +160,7 @@ public class FacultyDaoImpl implements FacultyDao {
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            // Handle nullable user_id field
             if (faculty.getUserId() != null) pstmt.setInt(1, faculty.getUserId());
             else pstmt.setNull(1, Types.INTEGER);
 
@@ -173,6 +181,7 @@ public class FacultyDaoImpl implements FacultyDao {
             }
         } catch (SQLException e) {
             logger.error("Error updating faculty {}: {}", faculty.getFacultyUniqueId(), e.getMessage());
+            // Handle specific constraint violations with user-friendly messages
             if (e.getMessage().contains("Duplicate entry") && e.getMessage().contains("faculty_unique_id")) {
                 throw new DataAccessException("Faculty Unique ID '" + faculty.getFacultyUniqueId() + "' already exists for another faculty.", e);
             }
@@ -199,6 +208,7 @@ public class FacultyDaoImpl implements FacultyDao {
             }
         } catch (SQLException e) {
             logger.error("Error deleting faculty with ID {}: {}", facultyMemberId, e.getMessage());
+            // Check for foreign key constraint violations (faculty has related records)
             if (e.getErrorCode() == 1451) { // FK constraint
                 throw new DataAccessException("Cannot delete faculty. Faculty member has related records (e.g., lecture sessions, grades).", e);
             }
@@ -222,10 +232,11 @@ public class FacultyDaoImpl implements FacultyDao {
         return 0;
     }
 
+    // Basic mapper for faculty only
     private Faculty mapRowToFaculty(ResultSet rs) throws SQLException {
         Faculty faculty = new Faculty();
         faculty.setFacultyMemberId(rs.getInt("faculty_member_id"));
-        faculty.setUserId(rs.getObject("user_id", Integer.class));
+        faculty.setUserId(rs.getObject("user_id", Integer.class)); // Handle nullable user_id
         faculty.setFacultyUniqueId(rs.getString("faculty_unique_id"));
         faculty.setFirstName(rs.getString("first_name"));
         faculty.setLastName(rs.getString("last_name"));
@@ -238,6 +249,7 @@ public class FacultyDaoImpl implements FacultyDao {
         return faculty;
     }
 
+    // Enhanced mapper that includes department and user information
     private Faculty mapRowToFacultyWithDetails(ResultSet rs) throws SQLException {
         Faculty faculty = mapRowToFaculty(rs);
         faculty.setDepartmentName(rs.getString("department_name"));
