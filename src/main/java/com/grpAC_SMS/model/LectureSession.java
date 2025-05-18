@@ -14,7 +14,6 @@ public class LectureSession {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // For display purposes
     private String courseName;
     private String facultyName;
     private String termName;
@@ -24,7 +23,6 @@ public class LectureSession {
     public LectureSession() {
     }
 
-    // Getters and Setters
     public int getLectureSessionId() {
         return lectureSessionId;
     }

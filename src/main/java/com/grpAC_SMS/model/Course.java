@@ -17,9 +17,9 @@ public class Course {
     private String programName;
     private String departmentName;
 
-    // Transient fields for specific view contexts (like faculty's "my courses in a term")
+    // Transient fields for specific view contexts
     private transient String termName;
-    private transient int academicTermId; // Store the ID of the term it's being viewed under
+    private transient int academicTermId;
 
     public Course() {
     }

@@ -17,7 +17,7 @@ public class Faculty {
 
     // For display purposes
     private String departmentName;
-    private String userEmail; // From Users table if linked
+    private String userEmail; // from Users table if linked
 
     public Faculty() {
     }

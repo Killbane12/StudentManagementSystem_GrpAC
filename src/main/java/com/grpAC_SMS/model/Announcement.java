@@ -9,7 +9,7 @@ public class Announcement {
     private String content;
     private int postedByUserId;
     private String targetRole; // ENUM('ALL', 'STUDENT', 'FACULTY', 'ADMIN')
-    private String imageFilePath; // For future use
+    private String imageFilePath; // For future implementations
     private Date expiryDate;
     private Timestamp createdAt;
     private Timestamp updatedAt;
