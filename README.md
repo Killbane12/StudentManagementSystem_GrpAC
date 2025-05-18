@@ -35,7 +35,7 @@ To set up and work on the system, you will need:**
 8.	Web Browser: Modern web browsers like Chrome, Firefox, or Edge.How to Set Up the System (Step-by-Step)
 
 
-**Based on the project structure and common practices for this technology stack:**
+**Deployment Steps:**
  
 1.	Set up the Development Environment: Install the required JDK, Apache Tomcat, MySQL, and your chosen IDE.
 2.	Install Maven: Ensure Maven is installed and configured correctly.
@@ -53,25 +53,28 @@ o	Execute the SQL CREATE TABLE queries provided in the database structure sectio
 
 **How to Use the System (After Running**
 Once the application is deployed and the Tomcat server is running, you can access the system through a web browser:
-1.	Access the Application: Open your web browser and navigate to the URL where your Tomcat server is running the application (e.g., http://localhost:8080/StudentManagementSystem/ or similar, depending on your deployment). This will likely redirect you to the login page.
-2.	Login: Use the login interface to authenticate yourself. The system supports three roles: Admin, Faculty, and Student. You will need valid credentials for one of these roles.
-3.	Navigate Based on Role: 
-o	Admin: Upon logging in, an Admin will typically land on an admin dashboard. From here, they can access functionalities for user management, academic structure management (Departments, Programs, Courses, Terms, Locations), course and faculty assignments, enrollments, lecture session creation, academic records oversight (grades and attendance), announcement management, and the NFC attendance simulation interface.
-o	Faculty: Faculty members will see a faculty dashboard upon login. They can view their assigned courses, see enrolled student lists, input and update grades for their courses, select and mark attendance for specific lecture sessions, and view announcements.
-o	Student: Students will land on their personalized dashboard, which is a unique feature. This dashboard provides a summary of current courses, attendance snippets, and relevant announcements. Students can also view their profile, enrolled courses, grades, and detailed attendance records, and view announcements targeted to them or all users.
-4.	Perform Actions: Interact with the system through forms, links, and buttons to perform specific actions relevant to your role (e.g., adding a new student, enrolling a student in a course, recording grades, viewing attendance). Server-side validation will be performed on user input.
-5.	Logout: When finished, securely log out of the system.
+1.	Access the Application:
+   Open your web browser and navigate to the URL where your Tomcat server is running the application (e.g., http://localhost:8080/StudentManagementSystem/ or similar, depending on your deployment). This will likely redirect you to the login page.
+3.	Login:
+   Use the login interface to authenticate yourself. The system supports three roles: Admin, Faculty, and Student. You will need valid credentials for one of these roles.
+5.	Navigate Based on Role:
+   o	Admin: Upon logging in, an Admin will typically land on an admin dashboard. From here, they can access functionalities for user management, academic structure management (Departments, Programs, Courses, Terms, Locations), course and faculty assignments, enrollments, lecture session creation, academic records oversight (grades and attendance), announcement management, and the NFC attendance simulation interface.
+  	o	Faculty: Faculty members will see a faculty dashboard upon login. They can view their assigned courses, see enrolled student lists, input and update grades for their courses, select and mark attendance for specific lecture sessions, and view announcements.
+  	o	Student: Students will land on their personalized dashboard, which is a unique feature. This dashboard provides a summary of current courses, attendance snippets, and relevant announcements. Students can also view their profile, enrolled courses, grades, and detailed attendance records, and view announcements targeted to them or all users.
+6.	Perform Actions:
+   Interact with the system through forms, links, and buttons to perform specific actions relevant to your role (e.g., adding a new student, enrolling a student in a course, recording grades, viewing attendance). Server-side validation will be performed on user input.
+8.	Logout:
+   When finished, securely log out of the system.
 
 
 **Group Members**
-
-1.Pasan Akalanka
-2.D.P.S.Senarethna-32814
-3.R.S.D.Senarathna-32837
-4.K.E.I.Kovilawaththa-32500
-5.N.A.O.N .Perera-32098
-6.K.L.Y.K.Lekamge-32476
-7.K.L.I.Lakshani-32589
-8.H.M.L.P.Herath-32648
-9.B.A.H.T.Kumari-33061
-**10.A.P.R.Jayananda-32927**
+1. Pasan Akalanka
+2. D.P.S.Senarethna-32814
+3. R.S.D.Senarathna-32837
+4. K.E.I.Kovilawaththa-32500
+5. N.A.O.N .Perera-32098
+6. K.L.Y.K.Lekamge-32476
+7. K.L.I.Lakshani-32589
+8. H.M.L.P.Herath-32648
+9. B.A.H.T.Kumari-33061
+10. A.P.R.Jayananda-32927
