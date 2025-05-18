@@ -1,6 +1,7 @@
 package com.grpAC_SMS.dao.impl;
 
 import com.grpAC_SMS.dao.StudentDao;
+import com.grpAC_SMS.model.Course;
 import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Student;
 import com.grpAC_SMS.util.DatabaseConnector;
@@ -268,6 +269,7 @@ public class StudentDaoImpl implements StudentDao {
         return students;
     }
 
+}
     @Override
     public long countTotalStudents() {
         String sql = "SELECT COUNT(*) FROM Students";

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseDao {
+    List<Course> selectCourse();
+    List<Course> getCoursesByStudentId(int studentId);
+}
     Course add(Course course);
 
     Optional<Course> findById(int courseId);

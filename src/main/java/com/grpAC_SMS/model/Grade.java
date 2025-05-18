@@ -10,8 +10,16 @@ public class Grade {
     private Integer gradedByFacultyId; // Can be null
     private Timestamp gradedDate;
     private String remarks;
+    private String courseName;
 
-    // For display purposes
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
     private String studentName;
     private String courseName;
     private String facultyName;
@@ -19,7 +27,6 @@ public class Grade {
     public Grade() {
     }
 
-    // Getters and Setters
     public int getGradeId() {
         return gradeId;
     }

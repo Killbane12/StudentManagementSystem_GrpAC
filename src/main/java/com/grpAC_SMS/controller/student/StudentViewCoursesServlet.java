@@ -1,6 +1,12 @@
 package com.grpAC_SMS.controller.student;
 
 import com.grpAC_SMS.dao.CourseDao;
+import com.grpAC_SMS.dao.impl.CourseDaoImpl;
+import com.grpAC_SMS.model.Course;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import com.grpAC_SMS.dao.StudentDao;
 import com.grpAC_SMS.dao.impl.CourseDaoImpl;
 import com.grpAC_SMS.dao.impl.StudentDaoImpl;
@@ -12,6 +18,8 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+
+@WebServlet("/StudentCourses")
 
 @WebServlet(name = "StudentViewCoursesServlet", value = "/student/my_enrolled_courses")
 public class StudentViewCoursesServlet extends HttpServlet {
