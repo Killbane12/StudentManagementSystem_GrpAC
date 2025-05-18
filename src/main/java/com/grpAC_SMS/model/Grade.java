@@ -16,6 +16,15 @@ public class Grade implements Serializable {
     private Integer gradedByFacultyId; // FK (nullable)
     private Timestamp gradedDate;
     private String remarks;
+    private String courseName;
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 
     // Optional related object
     // private Enrollment enrollment;

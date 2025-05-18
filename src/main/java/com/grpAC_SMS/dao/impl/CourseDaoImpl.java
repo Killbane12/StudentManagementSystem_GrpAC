@@ -48,4 +48,35 @@ public class CourseDaoImpl implements CourseDao {
         return course;
 //    return "";
     }
+
+    @Override
+    public List<Course> getCoursesByStudentId(int studentId) {
+        List<Course> courseList = new ArrayList<>();
+
+        String sql = "SELECT c.course_id, c.course_code, c.course_name " +
+                "FROM courses c " +
+                "JOIN enrollments e ON c.course_id = e.course_id " +
+                "WHERE e.student_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(j_url, j_un, j_pass);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, studentId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Course course = new Course();
+                course.setCourseId(rs.getInt("course_id"));
+                course.setCourseCode(rs.getString("course_code"));
+                course.setCourseName(rs.getString("course_name"));
+                courseList.add(course);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return courseList;
+    }
+
 }

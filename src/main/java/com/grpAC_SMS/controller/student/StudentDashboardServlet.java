@@ -3,8 +3,12 @@ package com.grpAC_SMS.controller.student;
 import com.grpAC_SMS.dao.CourseDao;
 import com.grpAC_SMS.dao.StudentDao;
 import com.grpAC_SMS.dao.impl.CourseDaoImpl;
+import com.grpAC_SMS.dao.impl.EnrollmentDaoImpl;
+import com.grpAC_SMS.dao.impl.LectureSessionDaoImpl;
 import com.grpAC_SMS.dao.impl.StudentDaoImpl;
 import com.grpAC_SMS.model.Course;
+import com.grpAC_SMS.model.Enrollment;
+import com.grpAC_SMS.model.LectureSession;
 import com.grpAC_SMS.model.Student;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -38,6 +42,18 @@ public class StudentDashboardServlet extends HttpServlet {
         List<Course> co = coimpl.selectCourse();
         req.setAttribute("course_list", co);
         coimpl.selectCourse();
+
+        EnrollmentDaoImpl enrollimpl = new EnrollmentDaoImpl();
+        List<Enrollment> enroll = enrollimpl.selectEnrollments();
+        req.setAttribute("enrollment_list", enroll);
+        enrollimpl.selectEnrollments();
+
+        LectureSessionDaoImpl lecsessionimpl = new LectureSessionDaoImpl();
+        List<LectureSession> lecture_session = lecsessionimpl.selectLectureSession();
+        req.setAttribute("lecturs_list", lecture_session);
+       // lecsessionimpl.selectLectureSession();
+
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/student/dashboard.jsp");
         dispatcher.forward(req, resp);
     }

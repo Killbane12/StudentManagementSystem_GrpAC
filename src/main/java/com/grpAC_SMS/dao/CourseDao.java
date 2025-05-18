@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface CourseDao {
     List<Course> selectCourse();
+    List<Course> getCoursesByStudentId(int studentId);
 }
