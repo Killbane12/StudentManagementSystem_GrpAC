@@ -59,6 +59,27 @@ public class Student {
     public String getFullName() { return firstName + " " + lastName; }
 
 
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+
     @Override
     public String toString() {
         return "Student{" +

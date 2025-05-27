@@ -50,6 +50,46 @@ public class Enrollment {
     public String getTermName() { return termName; }
     public void setTermName(String termName) { this.termName = termName; }
 
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getStudentUniqueId() {
+        return studentUniqueId;
+    }
+
+    public void setStudentUniqueId(String studentUniqueId) {
+        this.studentUniqueId = studentUniqueId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getCourseCode() {
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
+    }
+
+    public String getTermName() {
+        return termName;
+    }
+
+    public void setTermName(String termName) {
+        this.termName = termName;
+    }
+
     @Override
     public String toString() {
         return "Enrollment{" +
