@@ -1,154 +1,341 @@
-/* styles.css - Main application styles */
+/* General Body Styles */
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 0;
-    color: #212529; /* Dark text */
-    background-color: #F8F9FA; /* Light grey background */
 }
 
-.page-container {
-    display: flex;
-    flex-grow: 1; /* Make content area grow */
-}
-
-main.main-content {
+.container, .main-content {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
     flex-grow: 1;
-    margin: 10px; /* Add some margin around content */
+}
+
+/* Header Styles */
+header {
+    background-color: #004466; /* NSBM Dark Blue */
+    color: #fff;
+    padding: 15px 0;
+    border-bottom: 3px solid #ffcc00; /* NSBM Yellow */
+}
+
+.header-content {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-content .logo {
+    height: 50px;
+    margin-right: 15px;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 500;
+}
+
+.user-info {
+    font-size: 0.9em;
+}
+.user-info span {
+    margin-right: 15px;
+}
+.user-info a {
+    color: #ffcc00;
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ffcc00;
+    border-radius: 4px;
+}
+.user-info a:hover {
+    background-color: #ffcc00;
+    color: #004466;
+}
+
+/* Navigation */
+nav.main-nav {
+    background-color: #005580; /* Slightly lighter blue */
+    padding: 10px 0;
+}
+nav.main-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Center nav items */
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the ul itself */
+}
+nav.main-nav ul li {
+    margin-right: 1px; /* Small gap between items */
+}
+nav.main-nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+nav.main-nav ul li a:hover,
+nav.main-nav ul li a.active {
+    background-color: #004466; /* Darker on hover/active */
+    border-radius: 4px;
+}
+
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto; /* Pushes footer to bottom */
+    font-size: 0.9em;
+}
+
+/* Form Styles */
+.form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group input[type="datetime-local"],
+.form-group select,
+.form-group textarea {
+    width: calc(100% - 22px); /* Account for padding and border */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* Button Styles */
+.button, input[type="submit"], button {
+    background-color: #007bff; /* Primary blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    display: inline-block; /* Important for <a> tags styled as buttons */
+}
+.button:hover, input[type="submit"]:hover, button:hover {
+    background-color: #0056b3; /* Darker blue */
+}
+.button-danger {
+    background-color: #dc3545; /* Red for delete/cancel */
+}
+.button-danger:hover {
+    background-color: #c82333;
+}
+.button-secondary {
+    background-color: #6c757d; /* Grey */
+}
+.button-secondary:hover {
+    background-color: #5a6268;
+}
+.button-add {
+    background-color: #28a745; /* Green */
+    margin-bottom: 20px;
+}
+.button-add:hover {
+    background-color: #218838;
+}
+
+/* Table Styles */
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+table.data-table th, table.data-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+table.data-table th {
+    background-color: #f2f2f2; /* Light grey for headers */
+    font-weight: bold;
+    color: #333;
+}
+table.data-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Zebra striping */
+}
+table.data-table tr:hover {
+    background-color: #f1f1f1; /* Highlight on hover */
+}
+table.data-table td .actions a {
+    margin-right: 8px;
+    color: #007bff;
+    text-decoration: none;
+}
+table.data-table td .actions a:hover {
+    text-decoration: underline;
+}
+table.data-table td .actions a.delete {
+    color: #dc3545;
+}
+
+/* Messages and Alerts */
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+.message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.message.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.message.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Dashboard specific styles */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.dashboard-card {
+    background-color: #e9ecef;
     padding: 20px;
     border-radius: 5px;
-    background-color: #FFFFFF; /* White content area */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    text-align: center;
 }
-
-h1, h2, h3 {
-    margin-bottom: 15px;
-    color: #0056B3; /* NSBM Blue */
+.dashboard-card h3 {
+    margin-top: 0;
+    color: #005580;
 }
-
-a {
+.dashboard-card p {
+    font-size: 1.5em;
+    margin: 10px 0 0 0;
+    font-weight: bold;
+}
+.dashboard-card a {
+    display: block;
+    margin-top: 15px;
+    color: #007bff;
     text-decoration: none;
-    color: #007BFF;
+    font-weight: bold;
 }
-
-a:hover {
+.dashboard-card a:hover {
     text-decoration: underline;
 }
 
-/* Basic Form Styling */
-form {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #DEE2E6;
-    border-radius: 5px;
-    background-color: #FDFDFD;
-}
-
-form label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-form input[type="text"],
-form input[type="email"],
-form input[type="password"],
-form input[type="date"],
-form input[type="datetime-local"],
-form input[type="number"],
-form select,
-form textarea {
-    font-size: 1rem;
-    width: calc(100% - 20px); /* Account for padding */
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #CED4DA;
-    border-radius: 4px;
-}
-
-form button[type="submit"], .button {
-    font-size: 1rem;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    background-color: #007BFF; /* Blue */
-}
-
-form button[type="submit"]:hover, .button:hover {
-    background-color: #0056B3; /* Darker Blue */
-}
-
-.button.delete {
-    background-color: #DC3545; /* Red */
-}
-
-.button.delete:hover {
-    background-color: #C82333; /* Darker Red */
-}
-
-
-/* Basic Table Styling */
-table {
-    width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
-}
-
-table th, table td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #DEE2E6;
-}
-
-table th {
-    font-weight: bold;
-    background-color: #E9ECEF; /* Light header */
-}
-
-table tr:nth-child(even) {
-    background-color: #F8F9FA; /* Alternate row */
-}
-
-table tr:hover {
-    background-color: #E2E6EA;
-}
-
-table td a {
-    margin-right: 5px; /* Space out action links */
-}
-
-/* Message Styling */
-.message {
-    font-weight: bold;
-    margin-bottom: 20px;
+/* Student Dashboard Specifics */
+.student-dashboard .section {
+    margin-bottom: 30px;
     padding: 15px;
-    border: 1px solid transparent;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+.student-dashboard .section h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #004466;
+}
+.student-dashboard ul {
+    list-style: none;
+    padding: 0;
+}
+.student-dashboard ul li {
+    padding: 8px 0;
+    border-bottom: 1px dotted #eee;
+}
+.student-dashboard ul li:last-child {
+    border-bottom: none;
+}
+.student-dashboard .attendance-snippet {
+    margin-bottom: 10px;
+}
+.student-dashboard .attendance-snippet strong {
+    color: #333;
+}
+.student-dashboard .progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
     border-radius: 4px;
+    height: 20px;
+    margin-top: 5px;
+}
+.student-dashboard .progress-bar {
+    background-color: #4CAF50; /* Green */
+    height: 100%;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    line-height: 20px; /* Vertically center text */
 }
 
-.message.success {
-    color: #155724;
-    border-color: #C3E6CB;
-    background-color: #D4EDDA;
+/* NFC Simulator Specific Styles */
+.nfc-simulator-container {
+    max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #f9f9f9;
 }
-
-.message.error {
-    color: #721C24;
-    border-color: #F5C6CB;
-    background-color: #F8D7DA;
+.nfc-simulator-container h2 { text-align: center; color: #333; }
+.nfc-simulator-container .form-group { margin-bottom: 15px; }
+.nfc-simulator-container label { display: block; margin-bottom: 5px; font-weight: bold; }
+.nfc-simulator-container select, .nfc-simulator-container input[type="text"], .nfc-simulator-container input[type="button"], .nfc-simulator-container button {
+    width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
 }
-
-.message.info {
-    color: #0C5460;
-    border-color: #BEE5EB;
-    background-color: #D1ECF1;
-}
-
-
-/* Add other general styles */
+.nfc-simulator-container input[readonly] { background-color: #eee; }
+.nfc-simulator-container .button-group button { width: auto; margin-right: 10px; }
+.nfc-status-message { padding: 10px; margin-top: 15px; border-radius: 4px; text-align: center; }
+.nfc-status-message.success { background-color: #d4edda; color: #155724; }
+.nfc-status-message.error { background-color: #f8d7da; color: #721c24; }

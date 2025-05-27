@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%-- Removed: <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> --%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +58,7 @@
                     <c:forEach var="announcement" items="${announcements}">
                         <li>
                             <strong><c:out value="${announcement.title}"/></strong> (<fmt:formatDate value="${announcement.createdAt}" pattern="yyyy-MM-dd"/>)
-                            <p><c:out value="${fn:replace(announcement.content, '\\n', '<br/>')}" escapeXml="false"/></p> <%-- Added escapeXml="false" and fn prefix --%>
+                            <p>${announcement.contentHtml}</p> <%-- Use pre-processed HTML content --%>
                         </li>
                     </c:forEach>
                 </ul>

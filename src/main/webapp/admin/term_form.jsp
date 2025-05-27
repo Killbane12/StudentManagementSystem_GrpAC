@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty term.academicTermId ? 'Add New Academic Term' : 'Edit Academic Term'}</h2>
     <c:if test="${not empty requestScope.errorMessage}">
@@ -32,21 +32,18 @@
         </div>
         <div class="form-group">
             <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" value="${DateFormatter.sqlDateToString(term.startDate)}"
-                   required>
+            <input type="date" id="startDate" name="startDate" value="${DateFormatter.sqlDateToString(term.startDate)}" required>
         </div>
         <div class="form-group">
             <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" value="${DateFormatter.sqlDateToString(term.endDate)}"
-                   required>
+            <input type="date" id="endDate" name="endDate" value="${DateFormatter.sqlDateToString(term.endDate)}" required>
         </div>
         <div class="form-actions">
             <button type="submit" class="button">${empty term.academicTermId ? 'Create Term' : 'Update Term'}</button>
-            <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

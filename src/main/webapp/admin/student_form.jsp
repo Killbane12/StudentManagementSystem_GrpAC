@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty student.studentId ? 'Add New Student' : 'Edit Student Profile'}</h2>
     <c:if test="${not empty requestScope.errorMessage}">
@@ -32,12 +32,9 @@
 
         <h3>Student Profile Details</h3>
         <div class="form-group">
-            <label for="studentUniqueId">Student Unique ID
-                                         (${ApplicationConstants.STUDENT_ID_MIN_RANGE}-${ApplicationConstants.STUDENT_ID_MAX_RANGE}):</label>
-            <input type="text" id="studentUniqueId" name="studentUniqueId"
-                   value="<c:out value='${student.studentUniqueId}'/>"
-                   required pattern="${ApplicationConstants.STUDENT_ID_RANGE_PATTERN}"
-                   title="${ApplicationConstants.STUDENT_ID_RANGE_TITLE}">
+            <label for="studentUniqueId">Student Unique ID (${ApplicationConstants.STUDENT_ID_MIN_RANGE}-${ApplicationConstants.STUDENT_ID_MAX_RANGE}):</label>
+            <input type="text" id="studentUniqueId" name="studentUniqueId" value="<c:out value='${student.studentUniqueId}'/>"
+                   required pattern="${ApplicationConstants.STUDENT_ID_RANGE_PATTERN}" title="${ApplicationConstants.STUDENT_ID_RANGE_TITLE}">
         </div>
         <div class="form-group">
             <label for="firstName">First Name (Required):</label>
@@ -49,8 +46,7 @@
         </div>
         <div class="form-group">
             <label for="dateOfBirth">Date of Birth (Required):</label>
-            <input type="date" id="dateOfBirth" name="dateOfBirth"
-                   value="${DateFormatter.sqlDateToString(student.dateOfBirth)}" required>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" value="${DateFormatter.sqlDateToString(student.dateOfBirth)}" required>
         </div>
         <div class="form-group">
             <label for="gender">Gender:</label>
@@ -71,8 +67,7 @@
         </div>
         <div class="form-group">
             <label for="enrollmentDate">Enrollment Date (Required):</label>
-            <input type="date" id="enrollmentDate" name="enrollmentDate"
-                   value="${DateFormatter.sqlDateToString(student.enrollmentDate)}" required>
+            <input type="date" id="enrollmentDate" name="enrollmentDate" value="${DateFormatter.sqlDateToString(student.enrollmentDate)}" required>
         </div>
         <div class="form-group">
             <label for="programId">Program (Optional):</label>
@@ -104,12 +99,9 @@
                 <h3>Linked User Account</h3>
                 <p>
                     This student profile is linked to User ID: <strong>${student.userId}</strong>.
-                    Login Email: <strong><c:out value="${user.email}"/></strong> (Set by ManageUsersServlet for `user`
-                    attribute).
+                    Login Email: <strong><c:out value="${user.email}"/></strong> (Set by ManageUsersServlet for `user` attribute).
                 </p>
-                <p>To change user account details (email, password, active status), please use the <a
-                        href="${pageContext.request.contextPath}/ManageUsersServlet?action=edit&userId=${student.userId}"
-                        target="_blank">Manage Users</a> page for User ID ${student.userId}.</p>
+                <p>To change user account details (email, password, active status), please use the <a href="${pageContext.request.contextPath}/ManageUsersServlet?action=edit&userId=${student.userId}" target="_blank">Manage Users</a> page for User ID ${student.userId}.</p>
                 <%-- Alternatively, if you want to allow email update from here:
                 <div class="form-group">
                    <label for="email">Login Email (Can be updated via Manage Users):</label>
@@ -120,13 +112,11 @@
         </c:choose>
 
         <div class="form-actions">
-            <button type="submit"
-                    class="button">${empty student.studentId ? 'Create Student & User Account' : 'Update Student Profile'}</button>
-            <a href="${pageContext.request.contextPath}/ManageStudentsServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <button type="submit" class="button">${empty student.studentId ? 'Create Student & User Account' : 'Update Student Profile'}</button>
+            <a href="${pageContext.request.contextPath}/ManageStudentsServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

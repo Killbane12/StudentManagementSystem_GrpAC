@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty course.courseId ? 'Add New Course' : 'Edit Course'}</h2>
 
@@ -52,8 +52,7 @@
         <div class="form-group">
             <label for="programId">Primary Program (Optional):</label>
             <select id="programId" name="programId">
-                <option value="0">-- None --</option>
-                <%-- Value 0 or "" for no specific program --%>
+                <option value="0">-- None --</option> <%-- Value 0 or "" for no specific program --%>
                 <c:forEach var="prog" items="${programList}">
                     <option value="${prog.programId}" ${course.programId == prog.programId ? 'selected' : ''}>
                         <c:out value="${prog.programName}"/>
@@ -67,11 +66,10 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="button">${empty course.courseId ? 'Create Course' : 'Update Course'}</button>
-            <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

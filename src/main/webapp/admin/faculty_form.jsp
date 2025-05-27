@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty faculty.facultyMemberId ? 'Add New Faculty Member' : 'Edit Faculty Profile'}</h2>
     <c:if test="${not empty requestScope.errorMessage}">
@@ -31,8 +31,7 @@
         <h3>Faculty Profile Details</h3>
         <div class="form-group">
             <label for="facultyUniqueId">Faculty Unique ID (e.g., FAC001) (Required):</label>
-            <input type="text" id="facultyUniqueId" name="facultyUniqueId"
-                   value="<c:out value='${faculty.facultyUniqueId}'/>" required>
+            <input type="text" id="facultyUniqueId" name="facultyUniqueId" value="<c:out value='${faculty.facultyUniqueId}'/>" required>
         </div>
         <div class="form-group">
             <label for="firstName">First Name (Required):</label>
@@ -55,13 +54,11 @@
         </div>
         <div class="form-group">
             <label for="officeLocation">Office Location:</label>
-            <input type="text" id="officeLocation" name="officeLocation"
-                   value="<c:out value='${faculty.officeLocation}'/>">
+            <input type="text" id="officeLocation" name="officeLocation" value="<c:out value='${faculty.officeLocation}'/>">
         </div>
         <div class="form-group">
             <label for="contactEmailFaculty">Contact Email (Profile):</label>
-            <input type="email" id="contactEmailFaculty" name="contactEmailFaculty"
-                   value="<c:out value='${faculty.contactEmail}'/>">
+            <input type="email" id="contactEmailFaculty" name="contactEmailFaculty" value="<c:out value='${faculty.contactEmail}'/>">
         </div>
         <div class="form-group">
             <label for="phoneNumber">Phone Number:</label>
@@ -88,20 +85,16 @@
                     This faculty profile is linked to User ID: <strong>${faculty.userId}</strong>.
                     Login Email: <strong><c:out value="${user.email}"/></strong>.
                 </p>
-                <p>To change user account details (email, password, active status), please use the <a
-                        href="${pageContext.request.contextPath}/ManageUsersServlet?action=edit&userId=${faculty.userId}"
-                        target="_blank">Manage Users</a> page for User ID ${faculty.userId}.</p>
+                <p>To change user account details (email, password, active status), please use the <a href="${pageContext.request.contextPath}/ManageUsersServlet?action=edit&userId=${faculty.userId}" target="_blank">Manage Users</a> page for User ID ${faculty.userId}.</p>
             </c:otherwise>
         </c:choose>
 
         <div class="form-actions">
-            <button type="submit"
-                    class="button">${empty faculty.facultyMemberId ? 'Create Faculty & User Account' : 'Update Faculty Profile'}</button>
-            <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <button type="submit" class="button">${empty faculty.facultyMemberId ? 'Create Faculty & User Account' : 'Update Faculty Profile'}</button>
+            <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

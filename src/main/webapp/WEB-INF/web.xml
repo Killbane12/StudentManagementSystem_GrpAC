@@ -4,39 +4,64 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-    <display-name>Student Management System (Group AC)</display-name>
+    <display-name>Student Management System - Group_AC</display-name>
 
-    <!-- Welcome File List -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
-        <!-- Alternative: map '/' to LoginServlet or HomeServlet -->
     </welcome-file-list>
 
-    <!-- Listeners, Filters, Servlets are configured via Annotations (@WebListener, @WebFilter, @WebServlet) -->
-    <!-- If NOT using annotations, uncomment and add mappings here -->
+    <!-- Listener for Application Initialization -->
+    <listener>
+        <listener-class>com.grpAC_SMS.listener.ApplicationContextListener</listener-class>
+    </listener>
 
-    <!-- Error Page Configuration -->
+    <!-- Filters -->
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>com.grpAC_SMS.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>com.grpAC_SMS.filter.AuthorizationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Servlets will be defined using @WebServlet annotations -->
+    <!-- Example:
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.grpAC_SMS.controller.auth.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    -->
+
+    <!-- Error Pages -->
     <error-page>
         <error-code>404</error-code>
         <location>/errorpages/error_404.jsp</location>
-    </error-page>
-    <error-page>
-        <error-code>403</error-code> <!-- Forbidden -->
-        <location>/common/unauthorized.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
         <location>/errorpages/error_500.jsp</location>
     </error-page>
     <error-page>
-        <exception-type>java.lang.Throwable</exception-type> <!-- Catch-all -->
+        <exception-type>java.lang.Throwable</exception-type>
         <location>/errorpages/error_500.jsp</location>
     </error-page>
 
-    <!-- Session Configuration -->
     <session-config>
-        <session-timeout>30</session-timeout> <!-- minutes -->
-        <tracking-mode>COOKIE</tracking-mode>
+        <session-timeout>30</session-timeout> <!-- 30 minutes -->
     </session-config>
 
 </web-app>

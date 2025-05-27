@@ -6,15 +6,18 @@ import com.grpAC_SMS.dao.UserDao;
 import com.grpAC_SMS.dao.impl.DepartmentDaoImpl;
 import com.grpAC_SMS.dao.impl.FacultyDaoImpl;
 import com.grpAC_SMS.dao.impl.UserDaoImpl;
-import com.grpAC_SMS.exception.BusinessLogicException;
-import com.grpAC_SMS.exception.DataAccessException;
-import com.grpAC_SMS.model.Faculty;
+import com.grpAC_SMS.model.Department;
 import com.grpAC_SMS.model.Role;
+import com.grpAC_SMS.model.Faculty;
 import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.service.UserService;
 import com.grpAC_SMS.service.impl.UserServiceImpl;
+import com.grpAC_SMS.exception.BusinessLogicException;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.InputValidator;
+import com.grpAC_SMS.util.PasswordHasher;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -116,8 +119,7 @@ public class ManageFacultyServlet extends HttpServlet {
     }
 
     private void loadDropdownData(HttpServletRequest request) {
-        if (request.getAttribute("departmentList") == null)
-            request.setAttribute("departmentList", departmentDao.findAll());
+        if(request.getAttribute("departmentList") == null) request.setAttribute("departmentList", departmentDao.findAll());
     }
 
     private void preserveFormDataOnError(HttpServletRequest request, String action) {
@@ -158,15 +160,15 @@ public class ManageFacultyServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("faculty") == null) request.setAttribute("faculty", new Faculty());
-        if (request.getAttribute("user") == null) request.setAttribute("user", new User());
+        if(request.getAttribute("faculty") == null) request.setAttribute("faculty", new Faculty());
+        if(request.getAttribute("user") == null) request.setAttribute("user", new User());
         loadDropdownData(request);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/faculty_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("faculty") == null) {
+        if(request.getAttribute("faculty") == null) {
             int id = Integer.parseInt(request.getParameter("id"));
             Faculty existingFaculty = facultyDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Faculty not found with ID: " + id));
@@ -201,13 +203,13 @@ public class ManageFacultyServlet extends HttpServlet {
                 InputValidator.isNullOrEmpty(lastName) || InputValidator.isNullOrEmpty(departmentIdStr) ||
                 InputValidator.isNullOrEmpty(email) || InputValidator.isNullOrEmpty(password)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Required fields missing (Unique ID, Name, Department, Login Email, Password).");
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_CREATE);
             showNewForm(request, response);
             return;
         }
         if (!InputValidator.isInteger(departmentIdStr)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Invalid Department ID.");
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_CREATE);
             showNewForm(request, response);
             return;
         }
@@ -218,7 +220,7 @@ public class ManageFacultyServlet extends HttpServlet {
         } catch (BusinessLogicException e) {
             logger.error("Failed to create user account for faculty: {}", e.getMessage());
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Failed to create user account: " + e.getMessage());
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_CREATE);
             showNewForm(request, response);
             return;
         }
@@ -246,7 +248,7 @@ public class ManageFacultyServlet extends HttpServlet {
                 logger.error("Failed to cleanup user {} after faculty profile error: {}", newUser.getUserId(), cleanupEx.getMessage());
             }
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Failed to create faculty profile: " + e.getMessage());
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_CREATE);
             showNewForm(request, response);
         }
     }
@@ -313,10 +315,8 @@ public class ManageFacultyServlet extends HttpServlet {
             if (facultyToDelete.getUserId() != null) {
                 try {
                     boolean statusChanged = userService.changeUserStatus(facultyToDelete.getUserId(), false); // Deactivate
-                    if (statusChanged)
-                        logger.info("Associated user {} deactivated for deleted faculty {}.", facultyToDelete.getUserId(), facultyMemberId);
-                    else
-                        logger.warn("Could not deactivate associated user {} for faculty {}.", facultyToDelete.getUserId(), facultyMemberId);
+                    if(statusChanged) logger.info("Associated user {} deactivated for deleted faculty {}.", facultyToDelete.getUserId(), facultyMemberId);
+                    else logger.warn("Could not deactivate associated user {} for faculty {}.", facultyToDelete.getUserId(), facultyMemberId);
                 } catch (Exception e) {
                     logger.error("Error managing associated user account {} for deleted faculty {}: {}",
                             facultyToDelete.getUserId(), facultyMemberId, e.getMessage());

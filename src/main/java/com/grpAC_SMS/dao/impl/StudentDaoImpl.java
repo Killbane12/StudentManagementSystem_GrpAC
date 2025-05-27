@@ -1,7 +1,6 @@
 package com.grpAC_SMS.dao.impl;
 
 import com.grpAC_SMS.dao.StudentDao;
-import com.grpAC_SMS.model.Course;
 import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Student;
 import com.grpAC_SMS.util.DatabaseConnector;
@@ -73,14 +72,43 @@ public class StudentDaoImpl implements StudentDao {
         return querySingleStudent(sql, studentId);
     }
 
+//    @Override
+//    public Optional<Student> findByUserId(int userId) {
+//        String sql = "SELECT s.*, p.program_name, u.email as user_email " +
+//                "FROM Students s " +
+//                "LEFT JOIN Programs p ON s.program_id = p.program_id " +
+//                "LEFT JOIN Users u ON s.user_id = u.user_id " +
+//                "WHERE s.user_id = ?";
+//        return querySingleStudent(sql, userId);
+//    }
+
     @Override
     public Optional<Student> findByUserId(int userId) {
+        logger.debug("Attempting to find student by user_id: {}", userId); // ADD THIS
         String sql = "SELECT s.*, p.program_name, u.email as user_email " +
                 "FROM Students s " +
                 "LEFT JOIN Programs p ON s.program_id = p.program_id " +
                 "LEFT JOIN Users u ON s.user_id = u.user_id " +
                 "WHERE s.user_id = ?";
-        return querySingleStudent(sql, userId);
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            logger.debug("Executing query: {} with user_id: {}", sql, userId); // ADD THIS
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                logger.debug("Student found for user_id: {}. Mapping now.", userId); // ADD THIS
+                Student student = mapRowToStudentWithDetails(rs);
+                logger.debug("Mapped student: {}", student.toString()); // ADD THIS (make sure toString() is useful)
+                return Optional.of(student);
+            } else {
+                logger.warn("No student record found in ResultSet for user_id: {}", userId); // ADD THIS
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException finding student by user_id {}: {}", userId, e.getMessage(), e); // Log with stack trace
+            throw new DataAccessException("Error finding student by user_id.", e);
+        }
+        logger.warn("Returning empty Optional for user_id: {}", userId); // ADD THIS
+        return Optional.empty();
     }
 
     @Override
@@ -269,7 +297,6 @@ public class StudentDaoImpl implements StudentDao {
         return students;
     }
 
-}
     @Override
     public long countTotalStudents() {
         String sql = "SELECT COUNT(*) FROM Students";

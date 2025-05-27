@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty location.locationId ? 'Add New Location' : 'Edit Location'}</h2>
     <c:if test="${not empty requestScope.errorMessage}">
@@ -27,21 +27,18 @@
 
         <div class="form-group">
             <label for="locationName">Location Name:</label>
-            <input type="text" id="locationName" name="locationName" value="<c:out value='${location.locationName}'/>"
-                   required>
+            <input type="text" id="locationName" name="locationName" value="<c:out value='${location.locationName}'/>" required>
         </div>
         <div class="form-group">
             <label for="capacity">Capacity (Optional):</label>
             <input type="number" id="capacity" name="capacity" value="${location.capacity}" min="0">
         </div>
         <div class="form-actions">
-            <button type="submit"
-                    class="button">${empty location.locationId ? 'Create Location' : 'Update Location'}</button>
-            <a href="${pageContext.request.contextPath}/ManageLocationsServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <button type="submit" class="button">${empty location.locationId ? 'Create Location' : 'Update Location'}</button>
+            <a href="${pageContext.request.contextPath}/ManageLocationsServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

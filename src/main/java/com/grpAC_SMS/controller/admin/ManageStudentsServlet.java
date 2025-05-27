@@ -6,16 +6,20 @@ import com.grpAC_SMS.dao.UserDao;
 import com.grpAC_SMS.dao.impl.ProgramDaoImpl;
 import com.grpAC_SMS.dao.impl.StudentDaoImpl;
 import com.grpAC_SMS.dao.impl.UserDaoImpl;
-import com.grpAC_SMS.exception.BusinessLogicException;
-import com.grpAC_SMS.exception.DataAccessException;
+import com.grpAC_SMS.model.Program;
 import com.grpAC_SMS.model.Role;
 import com.grpAC_SMS.model.Student;
 import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.service.UserService;
 import com.grpAC_SMS.service.impl.UserServiceImpl;
+import com.grpAC_SMS.exception.BusinessLogicException;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.DateFormatter;
 import com.grpAC_SMS.util.InputValidator;
+import com.grpAC_SMS.util.PasswordHasher;
+
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,7 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @WebServlet("/ManageStudentsServlet")
 public class ManageStudentsServlet extends HttpServlet {
@@ -118,7 +124,7 @@ public class ManageStudentsServlet extends HttpServlet {
     }
 
     private void loadDropdownData(HttpServletRequest request) {
-        if (request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
+        if(request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
     }
 
     private void preserveFormDataOnError(HttpServletRequest request, String action) {
@@ -166,15 +172,15 @@ public class ManageStudentsServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("student") == null) request.setAttribute("student", new Student());
-        if (request.getAttribute("user") == null) request.setAttribute("user", new User()); // For email/password fields
+        if(request.getAttribute("student") == null) request.setAttribute("student", new Student());
+        if(request.getAttribute("user") == null) request.setAttribute("user", new User()); // For email/password fields
         loadDropdownData(request);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/student_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("student") == null) { // Not from a failed POST
+        if(request.getAttribute("student") == null) { // Not from a failed POST
             int id = Integer.parseInt(request.getParameter("id"));
             Student existingStudent = studentDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Student not found with ID: " + id));
@@ -348,10 +354,8 @@ public class ManageStudentsServlet extends HttpServlet {
                     // Decide whether to delete or just deactivate user. Deactivating is safer.
                     // userService.deleteUser(studentToDelete.getUserId());
                     boolean statusChanged = userService.changeUserStatus(studentToDelete.getUserId(), false); // Deactivate
-                    if (statusChanged)
-                        logger.info("Associated user {} deactivated for deleted student {}.", studentToDelete.getUserId(), studentId);
-                    else
-                        logger.warn("Could not deactivate associated user {} for student {}.", studentToDelete.getUserId(), studentId);
+                    if(statusChanged) logger.info("Associated user {} deactivated for deleted student {}.", studentToDelete.getUserId(), studentId);
+                    else logger.warn("Could not deactivate associated user {} for student {}.", studentToDelete.getUserId(), studentId);
 
                 } catch (Exception e) {
                     logger.error("Error managing associated user account {} for deleted student {}: {}",

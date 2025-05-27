@@ -2,11 +2,12 @@ package com.grpAC_SMS.controller.admin;
 
 import com.grpAC_SMS.dao.*;
 import com.grpAC_SMS.dao.impl.*;
+import com.grpAC_SMS.model.*;
 import com.grpAC_SMS.exception.DataAccessException;
-import com.grpAC_SMS.model.LectureSession;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.DateFormatter;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -66,7 +67,7 @@ public class ManageLectureSessionsServlet extends HttpServlet {
             logger.error("NumberFormatException in LectureSessions GET: {}", e.getMessage());
             request.getSession().setAttribute(ApplicationConstants.SESSION_ERROR_MESSAGE, "Invalid ID format.");
             response.sendRedirect(request.getContextPath() + "/ManageLectureSessionsServlet?action=" + ApplicationConstants.ACTION_LIST);
-        } catch (Exception e) {
+        }catch (Exception e) {
             logger.error("General Exception in LectureSessions GET: {}", e.getMessage(), e);
             request.getSession().setAttribute(ApplicationConstants.SESSION_ERROR_MESSAGE, "An unexpected error occurred: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/ManageLectureSessionsServlet?action=" + ApplicationConstants.ACTION_LIST);
@@ -111,10 +112,10 @@ public class ManageLectureSessionsServlet extends HttpServlet {
     }
 
     private void loadDropdownData(HttpServletRequest request) {
-        if (request.getAttribute("courseList") == null) request.setAttribute("courseList", courseDao.findAll());
-        if (request.getAttribute("facultyList") == null) request.setAttribute("facultyList", facultyDao.findAll());
-        if (request.getAttribute("termList") == null) request.setAttribute("termList", academicTermDao.findAll());
-        if (request.getAttribute("locationList") == null) request.setAttribute("locationList", locationDao.findAll());
+        if(request.getAttribute("courseList") == null) request.setAttribute("courseList", courseDao.findAll());
+        if(request.getAttribute("facultyList") == null) request.setAttribute("facultyList", facultyDao.findAll());
+        if(request.getAttribute("termList") == null) request.setAttribute("termList", academicTermDao.findAll());
+        if(request.getAttribute("locationList") == null) request.setAttribute("locationList", locationDao.findAll());
     }
 
     private void preserveFormDataOnError(HttpServletRequest request, String action) {
@@ -126,16 +127,14 @@ public class ManageLectureSessionsServlet extends HttpServlet {
         }
 
         String courseIdStr = request.getParameter("courseId");
-        if (!InputValidator.isNullOrEmpty(courseIdStr) && InputValidator.isInteger(courseIdStr))
-            session.setCourseId(Integer.parseInt(courseIdStr));
+        if (!InputValidator.isNullOrEmpty(courseIdStr) && InputValidator.isInteger(courseIdStr)) session.setCourseId(Integer.parseInt(courseIdStr));
 
         String facultyIdStr = request.getParameter("facultyMemberId");
         if (!InputValidator.isNullOrEmpty(facultyIdStr) && InputValidator.isInteger(facultyIdStr) && Integer.parseInt(facultyIdStr) > 0) {
             session.setFacultyMemberId(Integer.parseInt(facultyIdStr));
         }
         String termIdStr = request.getParameter("academicTermId");
-        if (!InputValidator.isNullOrEmpty(termIdStr) && InputValidator.isInteger(termIdStr))
-            session.setAcademicTermId(Integer.parseInt(termIdStr));
+        if (!InputValidator.isNullOrEmpty(termIdStr) && InputValidator.isInteger(termIdStr)) session.setAcademicTermId(Integer.parseInt(termIdStr));
 
         String locationIdStr = request.getParameter("locationId");
         if (!InputValidator.isNullOrEmpty(locationIdStr) && InputValidator.isInteger(locationIdStr) && Integer.parseInt(locationIdStr) > 0) {
@@ -161,14 +160,14 @@ public class ManageLectureSessionsServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("session") == null) request.setAttribute("session", new LectureSession());
+        if(request.getAttribute("session") == null) request.setAttribute("session", new LectureSession());
         loadDropdownData(request);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/lecture_session_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("session") == null) {
+        if(request.getAttribute("session") == null) {
             int id = Integer.parseInt(request.getParameter("id"));
             LectureSession existingSession = lectureSessionDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Lecture Session not found with ID: " + id));
@@ -191,7 +190,7 @@ public class ManageLectureSessionsServlet extends HttpServlet {
                 InputValidator.isNullOrEmpty(termIdStr) || !InputValidator.isInteger(termIdStr) ||
                 !InputValidator.isValidDateTimeLocal(startDatetimeStr) || !InputValidator.isValidDateTimeLocal(endDatetimeStr)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Course, Term, and valid Start/End DateTimes are required.");
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_CREATE);
             showNewForm(request, response);
             return;
         }
@@ -201,7 +200,7 @@ public class ManageLectureSessionsServlet extends HttpServlet {
 
         if (startDatetime == null || endDatetime == null || startDatetime.isAfter(endDatetime) || startDatetime.isEqual(endDatetime)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Start DateTime must be before End DateTime.");
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_CREATE);
             showNewForm(request, response);
             return;
         }
@@ -237,7 +236,7 @@ public class ManageLectureSessionsServlet extends HttpServlet {
                 InputValidator.isNullOrEmpty(termIdStr) || !InputValidator.isInteger(termIdStr) ||
                 !InputValidator.isValidDateTimeLocal(startDatetimeStr) || !InputValidator.isValidDateTimeLocal(endDatetimeStr)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Course, Term, and valid Start/End DateTimes are required.");
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_UPDATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_UPDATE);
             showEditForm(request, response);
             return;
         }
@@ -247,7 +246,7 @@ public class ManageLectureSessionsServlet extends HttpServlet {
 
         if (startDatetime == null || endDatetime == null || startDatetime.isAfter(endDatetime) || startDatetime.isEqual(endDatetime)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Start DateTime must be before End DateTime.");
-            preserveFormDataOnError(request, ApplicationConstants.ACTION_UPDATE);
+            preserveFormDataOnError(request,ApplicationConstants.ACTION_UPDATE);
             showEditForm(request, response);
             return;
         }

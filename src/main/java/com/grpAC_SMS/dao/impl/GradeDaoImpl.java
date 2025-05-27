@@ -1,10 +1,9 @@
 package com.grpAC_SMS.dao.impl;
 
 import com.grpAC_SMS.dao.GradeDao;
-import com.grpAC_SMS.model.Grade;
-
-import com.grpAC_SMS.util.DatabaseConnector;
 import com.grpAC_SMS.exception.DataAccessException;
+import com.grpAC_SMS.model.Grade;
+import com.grpAC_SMS.util.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,16 +15,15 @@ import java.util.Optional;
 public class GradeDaoImpl implements GradeDao {
     private static final Logger logger = LoggerFactory.getLogger(GradeDaoImpl.class);
 
-
-    // Student name, course name and faculty name all in one query - very efficient!
     private static final String SELECT_GRADE_DETAILS_SQL =
-            "SELECT g.*, CONCAT(s.first_name, ' ', s.last_name) as student_name, c.course_name, " +
+            "SELECT g.*, CONCAT(s.first_name, ' ', s.last_name) as student_name, c.course_name, c.course_code, " + // Added c.course_code
                     "CONCAT(f.first_name, ' ', f.last_name) as graded_by_faculty_name " +
                     "FROM Grades g " +
                     "JOIN Enrollments e ON g.enrollment_id = e.enrollment_id " +
                     "JOIN Students s ON e.student_id = s.student_id " +
-                    "JOIN Courses c ON e.course_id = c.course_id " +
+                    "JOIN Courses c ON e.course_id = c.course_id " + // This join provides course_code
                     "LEFT JOIN Faculty f ON g.graded_by_faculty_id = f.faculty_member_id ";
+
 
     @Override
     public Grade add(Grade grade) {
@@ -36,7 +34,6 @@ public class GradeDaoImpl implements GradeDao {
             pstmt.setInt(1, grade.getEnrollmentId());
             pstmt.setString(2, grade.getGradeValue());
             pstmt.setString(3, grade.getAssessmentType());
-            // Special handling for null faculty ID
             if (grade.getGradedByFacultyId() != null) pstmt.setInt(4, grade.getGradedByFacultyId());
             else pstmt.setNull(4, Types.INTEGER);
             pstmt.setString(5, grade.getRemarks());
@@ -56,7 +53,7 @@ public class GradeDaoImpl implements GradeDao {
             return grade;
         } catch (SQLException e) {
             logger.error("Error adding grade for enrollment {}: {}", grade.getEnrollmentId(), e.getMessage());
-            //  unique constraint for enrollment+assessment_type
+            // Consider if a unique constraint on (enrollment_id, assessment_type) is needed/exists
             throw new DataAccessException("Error adding grade.", e);
         }
     }
@@ -97,7 +94,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findAllWithDetails() {
-
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "ORDER BY g.graded_date DESC, s.last_name, c.course_name";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -115,7 +111,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findByEnrollmentId(int enrollmentId) {
-        // get all grades for one student in one course
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE g.enrollment_id = ? ORDER BY g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -134,8 +129,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findByStudentId(int studentId) {
-
-        // Order by course name make it easy to read for student!
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE e.student_id = ? ORDER BY c.course_name, g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -154,7 +147,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findByCourseId(int courseId) { // All grades for a course (across all students/terms)
-        // Can see all grades ever given in one course
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE e.course_id = ? ORDER BY s.last_name, g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
@@ -173,11 +165,17 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public List<Grade> findGradesForFacultyCourse(int facultyMemberId, int courseId, int termId) {
-
+        // This is tricky as faculty is not directly linked to grade.
+        // Grades are linked to enrollment. Enrollment is student+course+term.
+        // Faculty teaches courses in terms.
+        // This method might be better suited if grades directly stored a 'module_session_id' or 'course_offering_id' linked to faculty.
+        // For now, let's assume grades are for a course offering by a faculty in a term.
+        // We need to find enrollments for the course in the term, then their grades.
         List<Grade> grades = new ArrayList<>();
         String sql = SELECT_GRADE_DETAILS_SQL +
                 "WHERE e.course_id = ? AND e.academic_term_id = ? " +
-
+                // Optionally filter by who graded it, if the current faculty is the one who graded
+                // AND (g.graded_by_faculty_id = ? OR g.graded_by_faculty_id IS NULL) -- if faculty can only see their own or unassigned.
                 "ORDER BY s.last_name, g.assessment_type";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -197,8 +195,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public Optional<Grade> findByEnrollmentAndAssessmentType(int enrollmentId, String assessmentType) {
-        // Find exact grade for specific test type
-
         String sql = SELECT_GRADE_DETAILS_SQL + "WHERE g.enrollment_id = ? AND g.assessment_type = ?";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -218,8 +214,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public void update(Grade grade) {
-        // Update function always set timestamp to current time!
-        // This way we know when grade was last changed - good for audit trail
         String sql = "UPDATE Grades SET enrollment_id = ?, grade_value = ?, assessment_type = ?, " +
                 "graded_by_faculty_id = ?, graded_date = CURRENT_TIMESTAMP, remarks = ? " +
                 "WHERE grade_id = ?";
@@ -247,7 +241,6 @@ public class GradeDaoImpl implements GradeDao {
 
     @Override
     public boolean delete(int gradeId) {
-
         String sql = "DELETE FROM Grades WHERE grade_id = ?";
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -266,8 +259,6 @@ public class GradeDaoImpl implements GradeDao {
         }
     }
 
-    // Two helper methods for map database row to Grade object
-    // First one is basic, second one include extra details from joins
     private Grade mapRowToGrade(ResultSet rs) throws SQLException {
         Grade grade = new Grade();
         grade.setGradeId(rs.getInt("grade_id"));
@@ -281,11 +272,10 @@ public class GradeDaoImpl implements GradeDao {
     }
 
     private Grade mapRowToGradeWithDetails(ResultSet rs) throws SQLException {
-        // This method use first method then add extra fields
-        // Very smart design - no code duplication!
         Grade grade = mapRowToGrade(rs);
         grade.setStudentName(rs.getString("student_name"));
         grade.setCourseName(rs.getString("course_name"));
+        grade.setCourseCode(rs.getString("course_code"));
         grade.setFacultyName(rs.getString("graded_by_faculty_name"));
         return grade;
     }

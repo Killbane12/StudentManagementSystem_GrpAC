@@ -2,11 +2,12 @@ package com.grpAC_SMS.controller.admin;
 
 import com.grpAC_SMS.dao.AcademicTermDao;
 import com.grpAC_SMS.dao.impl.AcademicTermDaoImpl;
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.AcademicTerm;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.DateFormatter;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -96,7 +97,7 @@ public class ManageAcademicTermsServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/ManageAcademicTermsServlet?action=" + ApplicationConstants.ACTION_LIST);
             }
         } catch (Exception e) {
-            logger.error("General Exception in AcademicTerms POST for action {}: {}", action, e.getMessage(), e);
+            logger.error("General Exception in AcademicTerms POST for action {}: {}",action, e.getMessage(), e);
             request.getSession().setAttribute(ApplicationConstants.SESSION_ERROR_MESSAGE, "An unexpected error occurred: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/ManageAcademicTermsServlet?action=" + ApplicationConstants.ACTION_LIST);
         }
@@ -124,13 +125,13 @@ public class ManageAcademicTermsServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("term") == null) request.setAttribute("term", new AcademicTerm());
+        if(request.getAttribute("term") == null) request.setAttribute("term", new AcademicTerm());
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/term_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("term") == null) {
+        if(request.getAttribute("term") == null) {
             int id = Integer.parseInt(request.getParameter("id"));
             AcademicTerm existingTerm = academicTermDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Academic Term not found with ID: " + id));

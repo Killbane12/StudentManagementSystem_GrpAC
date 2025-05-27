@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content">
     <h2>Course Management</h2>
     <c:if test="${not empty sessionScope.successMessage}">
@@ -20,8 +20,7 @@
         <p class="message error">${sessionScope.errorMessage}</p>
         <c:remove var="errorMessage" scope="session"/>
     </c:if>
-    <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=add" class="button button-add">Add New
-                                                                                                           Course</a>
+    <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=add" class="button button-add">Add New Course</a>
     <table class="data-table">
         <thead>
         <tr>
@@ -45,20 +44,17 @@
                 <td><c:out value="${course.departmentName}"/></td>
                 <td class="actions">
                     <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=edit&id=${course.courseId}">Edit</a>
-                    <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=delete&id=${course.courseId}"
-                       class="delete"
+                    <a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=delete&id=${course.courseId}" class="delete"
                        onclick="return confirm('Are you sure you want to delete this course?');">Delete</a>
                 </td>
             </tr>
         </c:forEach>
         <c:if test="${empty courseList}">
-            <tr>
-                <td colspan="7">No courses found.</td>
-            </tr>
+            <tr><td colspan="7">No courses found.</td></tr>
         </c:if>
         </tbody>
     </table>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

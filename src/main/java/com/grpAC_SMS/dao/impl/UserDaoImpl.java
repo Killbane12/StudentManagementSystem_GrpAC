@@ -1,10 +1,10 @@
 package com.grpAC_SMS.dao.impl;
 
 import com.grpAC_SMS.dao.UserDao;
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Role;
 import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.util.DatabaseConnector;
+import com.grpAC_SMS.exception.DataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

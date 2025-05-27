@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content">
     <h2>Academic Term Management</h2>
     <c:if test="${not empty sessionScope.successMessage}">
@@ -20,8 +20,7 @@
         <p class="message error">${sessionScope.errorMessage}</p>
         <c:remove var="errorMessage" scope="session"/>
     </c:if>
-    <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=add" class="button button-add">Add New
-                                                                                                                 Term</a>
+    <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=add" class="button button-add">Add New Term</a>
     <table class="data-table">
         <thead>
         <tr>
@@ -41,20 +40,17 @@
                 <td><fmt:formatDate value="${term.endDate}" pattern="yyyy-MM-dd"/></td>
                 <td class="actions">
                     <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=edit&id=${term.academicTermId}">Edit</a>
-                    <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=delete&id=${term.academicTermId}"
-                       class="delete"
+                    <a href="${pageContext.request.contextPath}/ManageAcademicTermsServlet?action=delete&id=${term.academicTermId}" class="delete"
                        onclick="return confirm('Are you sure you want to delete this term?');">Delete</a>
                 </td>
             </tr>
         </c:forEach>
         <c:if test="${empty termList}">
-            <tr>
-                <td colspan="5">No academic terms found.</td>
-            </tr>
+            <tr><td colspan="5">No academic terms found.</td></tr>
         </c:if>
         </tbody>
     </table>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

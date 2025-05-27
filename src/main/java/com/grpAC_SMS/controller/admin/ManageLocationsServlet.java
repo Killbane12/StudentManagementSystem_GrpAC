@@ -2,10 +2,11 @@ package com.grpAC_SMS.controller.admin;
 
 import com.grpAC_SMS.dao.LocationDao;
 import com.grpAC_SMS.dao.impl.LocationDaoImpl;
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Location;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -123,13 +124,13 @@ public class ManageLocationsServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("location") == null) request.setAttribute("location", new Location());
+        if(request.getAttribute("location") == null) request.setAttribute("location", new Location());
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/location_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("location") == null) {
+        if(request.getAttribute("location") == null) {
             int id = Integer.parseInt(request.getParameter("id"));
             Location existingLocation = locationDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Location not found with ID: " + id));

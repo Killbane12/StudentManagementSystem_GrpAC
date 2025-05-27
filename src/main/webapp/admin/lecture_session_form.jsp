@@ -5,12 +5,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>${empty session.lectureSessionId ? 'Add New' : 'Edit'} Lecture Session | Student Management System -
-                                                                  Group_AC</title>
+    <title>${empty session.lectureSessionId ? 'Add New' : 'Edit'} Lecture Session | Student Management System - Group_AC</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty session.lectureSessionId ? 'Add New Lecture Session' : 'Edit Lecture Session'}</h2>
     <c:if test="${not empty requestScope.errorMessage}">
@@ -74,8 +73,7 @@
         <div class="form-group">
             <label for="sessionStartDatetime">Start Date & Time:</label>
             <input type="datetime-local" id="sessionStartDatetime" name="sessionStartDatetime"
-                   value="${DateFormatter.localDateTimeToHtmlDateTimeLocalString(session.sessionStartDatetime)}"
-                   required>
+                   value="${DateFormatter.localDateTimeToHtmlDateTimeLocalString(session.sessionStartDatetime)}" required>
         </div>
         <div class="form-group">
             <label for="sessionEndDatetime">End Date & Time:</label>
@@ -83,13 +81,11 @@
                    value="${DateFormatter.localDateTimeToHtmlDateTimeLocalString(session.sessionEndDatetime)}" required>
         </div>
         <div class="form-actions">
-            <button type="submit"
-                    class="button">${empty session.lectureSessionId ? 'Create Session' : 'Update Session'}</button>
-            <a href="${pageContext.request.contextPath}/ManageLectureSessionsServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <button type="submit" class="button">${empty session.lectureSessionId ? 'Create Session' : 'Update Session'}</button>
+            <a href="${pageContext.request.contextPath}/ManageLectureSessionsServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

@@ -34,7 +34,7 @@
                             <option value="${session.lectureSessionId}">
                                 <fmt:formatDate value="${session.sessionStartDatetime}" pattern="yyyy-MM-dd HH:mm"/> -
                                 <fmt:formatDate value="${session.sessionEndDatetime}" pattern="HH:mm"/>
-                                (<c:out value="${not empty session.locationName ? session.locationName : 'N/A'}"/>)
+                                                                                                                     (<c:out value="${not empty session.locationName ? session.locationName : 'N/A'}"/>)
                             </option>
                         </c:forEach>
                     </select>

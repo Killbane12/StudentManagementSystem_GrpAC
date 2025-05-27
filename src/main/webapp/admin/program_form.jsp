@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty program.programId ? 'Add New Program' : 'Edit Program'}</h2>
     <c:if test="${not empty sessionScope.errorMessage}">
@@ -27,8 +27,7 @@
         </c:if>
         <div class="form-group">
             <label for="programName">Program Name:</label>
-            <input type="text" id="programName" name="programName" value="<c:out value='${program.programName}'/>"
-                   required>
+            <input type="text" id="programName" name="programName" value="<c:out value='${program.programName}'/>" required>
         </div>
         <div class="form-group">
             <label for="departmentId">Department:</label>
@@ -43,8 +42,7 @@
         </div>
         <div class="form-group">
             <label for="durationYears">Duration (Years):</label>
-            <input type="number" id="durationYears" name="durationYears" value="${program.durationYears}" min="1"
-                   max="10">
+            <input type="number" id="durationYears" name="durationYears" value="${program.durationYears}" min="1" max="10">
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
@@ -52,11 +50,10 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="button">${empty program.programId ? 'Create' : 'Update'}</button>
-            <a href="${pageContext.request.contextPath}/ManageProgramsServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <a href="${pageContext.request.contextPath}/ManageProgramsServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

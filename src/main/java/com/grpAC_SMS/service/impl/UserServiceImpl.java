@@ -1,13 +1,13 @@
 package com.grpAC_SMS.service.impl;
 
 import com.grpAC_SMS.dao.UserDao;
-import com.grpAC_SMS.dao.impl.UserDaoImpl;
+import com.grpAC_SMS.dao.impl.UserDaoImpl; // Or inject via constructor/setter
 import com.grpAC_SMS.exception.BusinessLogicException;
 import com.grpAC_SMS.model.Role;
 import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.service.UserService;
-import com.grpAC_SMS.util.InputValidator;
 import com.grpAC_SMS.util.PasswordHasher;
+import com.grpAC_SMS.util.InputValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +19,12 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     public UserServiceImpl() {
-        this.userDao = new UserDaoImpl(); // fallback way
+        this.userDao = new UserDaoImpl(); // Basic instantiation
     }
 
+    // Constructor for dependency injection (preferred)
     public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao; // DI way (better)
+        this.userDao = userDao;
     }
 
     @Override
@@ -61,8 +62,9 @@ public class UserServiceImpl implements UserService {
         if (userDao.findByUsername(username).isPresent()) {
             throw new BusinessLogicException("Username already exists.");
         }
+        // Could also check for email uniqueness here if UserDao doesn't throw a specific enough exception
+        // or if we want to provide a friendlier message before hitting DB constraint.
 
-        // hashing pw before save
         String hashedPassword = PasswordHasher.hashPassword(password);
         User newUser = new User(username, hashedPassword, email, role, isActive);
 
@@ -76,12 +78,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(int userId) {
-        return userDao.findById(userId).orElse(null); // return null if not found
+        return userDao.findById(userId).orElse(null);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.findAll(); // just fetch all
+        return userDao.findAll();
     }
 
     @Override
@@ -96,19 +98,19 @@ public class UserServiceImpl implements UserService {
         User existingUser = userDao.findById(user.getUserId())
                 .orElseThrow(() -> new BusinessLogicException("User not found for update."));
 
-        // set updated values
+        // Update fields
         existingUser.setUsername(user.getUsername());
         existingUser.setEmail(user.getEmail());
         existingUser.setRole(user.getRole());
         existingUser.setActive(user.isActive());
 
-        // update pw if provided
         if (!InputValidator.isNullOrEmpty(newPasswordIfChanged)) {
             if (!InputValidator.isValidPassword(newPasswordIfChanged)) {
                 throw new BusinessLogicException("New password does not meet complexity requirements (min 6 chars).");
             }
             existingUser.setPasswordHash(PasswordHasher.hashPassword(newPasswordIfChanged));
         }
+        // If newPasswordIfChanged is null/empty, password_hash remains unchanged from existingUser fetch
 
         try {
             userDao.update(existingUser);
@@ -121,14 +123,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean changeUserStatus(int userId, boolean isActive) {
-        return userDao.activateUser(userId, isActive); // toggle active status
+        return userDao.activateUser(userId, isActive);
     }
 
     @Override
     public void deleteUser(int userId) throws BusinessLogicException {
         if (userId == 0) throw new BusinessLogicException("Invalid user ID for deletion.");
         try {
-            // maybe check for special roles later (like admin)
+            // Add any business logic checks here, e.g., cannot delete currently logged-in admin, etc.
             userDao.delete(userId);
         } catch (com.grpAC_SMS.exception.DataAccessException e) {
             logger.error("Data access error during user deletion for ID {}: {}", userId, e.getMessage());

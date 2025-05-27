@@ -18,7 +18,7 @@
     <h2>Admin Dashboard</h2>
     <p>Welcome to the Administrator Panel. From here you can manage all aspects of the system.</p>
 
-    <%--    <jsp:include page="/common/admin_nav.jsp" />--%>
+<%--    <jsp:include page="/common/admin_nav.jsp" />--%>
 
     <div class="dashboard-grid">
         <div class="dashboard-card">
@@ -55,17 +55,10 @@
 
     <h3>Quick Actions</h3>
     <ul>
-        <li><a href="${pageContext.request.contextPath}/ManageUsersServlet?action=add" class="button">Add New User</a>
-        </li>
-        <li><a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=add" class="button">Add New
-                                                                                                        Course</a></li>
-        <li><a href="${pageContext.request.contextPath}/ManageLectureSessionsServlet?action=add" class="button">Create
-                                                                                                                Lecture
-                                                                                                                Session</a>
-        </li>
-        <li><a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=add" class="button">Post
-                                                                                                              Announcement</a>
-        </li>
+        <li><a href="${pageContext.request.contextPath}/ManageUsersServlet?action=add" class="button">Add New User</a></li>
+        <li><a href="${pageContext.request.contextPath}/ManageCoursesServlet?action=add" class="button">Add New Course</a></li>
+        <li><a href="${pageContext.request.contextPath}/ManageLectureSessionsServlet?action=add" class="button">Create Lecture Session</a></li>
+        <li><a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=add" class="button">Post Announcement</a></li>
     </ul>
 </div>
 

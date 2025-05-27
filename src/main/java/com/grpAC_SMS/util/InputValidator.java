@@ -39,12 +39,12 @@ public class InputValidator {
     }
 
     public static boolean isPositiveInteger(String str) {
-        if (!isInteger(str)) return false;
+        if(!isInteger(str)) return false;
         return Integer.parseInt(str) > 0;
     }
 
     public static boolean isWithinRange(String str, int min, int max) {
-        if (!isInteger(str)) return false;
+        if(!isInteger(str)) return false;
         int val = Integer.parseInt(str);
         return val >= min && val <= max;
     }
@@ -57,7 +57,7 @@ public class InputValidator {
 
     public static boolean isValidDateTimeLocal(String dateTime) {
         // Basic check for YYYY-MM-DDTHH:MM format
-        if (isNullOrEmpty(dateTime)) return false;
+        if(isNullOrEmpty(dateTime)) return false;
         return dateTime.matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}");
     }
 }

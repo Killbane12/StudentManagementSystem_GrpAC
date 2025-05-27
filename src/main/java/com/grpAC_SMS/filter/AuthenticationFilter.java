@@ -49,7 +49,7 @@ public class AuthenticationFilter implements Filter {
 
 
         if (isLoggedIn || isAllowedPath) {
-            if (isLoggedIn && (servletPath.equals("/LoginServlet") || path.equals("/auth/login.jsp"))) {
+            if (isLoggedIn && (servletPath.equals("/LoginServlet") || path.equals("/auth/login.jsp")) ) {
                 User user = (User) session.getAttribute(ApplicationConstants.SESSION_USER);
                 logger.debug("User already logged in, redirecting from login page to dashboard.");
                 redirectToDashboard(user, httpRequest, httpResponse);

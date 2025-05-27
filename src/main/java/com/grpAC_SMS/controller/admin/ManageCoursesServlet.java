@@ -6,10 +6,13 @@ import com.grpAC_SMS.dao.ProgramDao;
 import com.grpAC_SMS.dao.impl.CourseDaoImpl;
 import com.grpAC_SMS.dao.impl.DepartmentDaoImpl;
 import com.grpAC_SMS.dao.impl.ProgramDaoImpl;
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Course;
+import com.grpAC_SMS.model.Department;
+import com.grpAC_SMS.model.Program;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -111,8 +114,9 @@ public class ManageCoursesServlet extends HttpServlet {
             } else {
                 response.sendRedirect(request.getContextPath() + "/ManageCoursesServlet?action=" + ApplicationConstants.ACTION_LIST);
             }
-        } catch (Exception e) {
-            logger.error("General Exception in Courses POST for action {}: {}", action, e.getMessage(), e);
+        }
+        catch (Exception e) {
+            logger.error("General Exception in Courses POST for action {}: {}",action, e.getMessage(), e);
             request.getSession().setAttribute(ApplicationConstants.SESSION_ERROR_MESSAGE, "An unexpected error occurred: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/ManageCoursesServlet?action=" + ApplicationConstants.ACTION_LIST);
         }
@@ -130,7 +134,7 @@ public class ManageCoursesServlet extends HttpServlet {
         }
         String programIdStr = request.getParameter("programId");
         if (!InputValidator.isNullOrEmpty(programIdStr) && InputValidator.isInteger(programIdStr)) {
-            if (Integer.parseInt(programIdStr) > 0) course.setProgramId(Integer.parseInt(programIdStr));
+            if(Integer.parseInt(programIdStr) > 0) course.setProgramId(Integer.parseInt(programIdStr));
         }
         String deptIdStr = request.getParameter("departmentId");
         if (!InputValidator.isNullOrEmpty(deptIdStr) && InputValidator.isInteger(deptIdStr)) {
@@ -145,9 +149,8 @@ public class ManageCoursesServlet extends HttpServlet {
         request.setAttribute("course", course);
 
         // Re-fetch dropdown data
-        if (request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
-        if (request.getAttribute("departmentList") == null)
-            request.setAttribute("departmentList", departmentDao.findAll());
+        if(request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
+        if(request.getAttribute("departmentList") == null) request.setAttribute("departmentList", departmentDao.findAll());
     }
 
     private void listCourses(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -158,24 +161,22 @@ public class ManageCoursesServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("course") == null) request.setAttribute("course", new Course());
-        if (request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
-        if (request.getAttribute("departmentList") == null)
-            request.setAttribute("departmentList", departmentDao.findAll());
+        if(request.getAttribute("course") == null) request.setAttribute("course", new Course());
+        if(request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
+        if(request.getAttribute("departmentList") == null) request.setAttribute("departmentList", departmentDao.findAll());
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/course_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("course") == null) {
+        if(request.getAttribute("course") == null) {
             int id = Integer.parseInt(request.getParameter("id"));
             Course existingCourse = courseDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Course not found with ID: " + id));
             request.setAttribute("course", existingCourse);
         }
-        if (request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
-        if (request.getAttribute("departmentList") == null)
-            request.setAttribute("departmentList", departmentDao.findAll());
+        if(request.getAttribute("programList") == null) request.setAttribute("programList", programDao.findAll());
+        if(request.getAttribute("departmentList") == null) request.setAttribute("departmentList", departmentDao.findAll());
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/course_form.jsp");
         dispatcher.forward(request, response);
     }

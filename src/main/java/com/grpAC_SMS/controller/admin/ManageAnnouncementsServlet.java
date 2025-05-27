@@ -133,7 +133,7 @@ public class ManageAnnouncementsServlet extends HttpServlet {
 
 
     private void listAnnouncements(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Announcement> announcementList = announcementDao.findAllWithDetails();
+        List<Announcement> announcementList = announcementDao.findAllWithDetails(); // Get poster's username
         request.setAttribute("announcementList", announcementList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/announcements_list.jsp");
         dispatcher.forward(request, response);
@@ -141,9 +141,7 @@ public class ManageAnnouncementsServlet extends HttpServlet {
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if(request.getAttribute("announcement") == null) request.setAttribute("announcement", new Announcement());
-        if(request.getAttribute("targetRoles") == null) request.setAttribute("targetRoles", Role.values());
-
-        // For dropdown
+        if(request.getAttribute("targetRoles") == null) request.setAttribute("targetRoles", Role.values()); // For dropdown
         // Add "ALL" as an option for target role
         request.setAttribute("allTargetOption", "ALL");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/announcement_form.jsp");
@@ -168,7 +166,7 @@ public class ManageAnnouncementsServlet extends HttpServlet {
         String content = request.getParameter("content");
         String targetRoleStr = request.getParameter("targetRole");
         String expiryDateStr = request.getParameter("expiryDate");
-        // String imagePath = request.getParameter("imageFilePath"); // to use images with announcements
+        // String imagePath = request.getParameter("imageFilePath"); // For future use
 
         if (InputValidator.isNullOrEmpty(title) || InputValidator.isNullOrEmpty(content) || InputValidator.isNullOrEmpty(targetRoleStr)) {
             request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Title, Content, and Target Role are required.");
@@ -193,7 +191,7 @@ public class ManageAnnouncementsServlet extends HttpServlet {
         announcement.setTitle(title);
         announcement.setContent(content);
         announcement.setPostedByUserId(postedByUserId);
-        announcement.setTargetRole(targetRoleStr); // enum will handle validation if input is bad, or validate here
+        announcement.setTargetRole(targetRoleStr); // ENUM will handle validation if input is bad, or validate here
         announcement.setExpiryDate(expiryDate);
         // announcement.setImageFilePath(imagePath);
 
@@ -230,7 +228,7 @@ public class ManageAnnouncementsServlet extends HttpServlet {
         Announcement announcement = announcementDao.findById(id).orElseThrow(() -> new DataAccessException("Announcement not found for update."));
         announcement.setTitle(title);
         announcement.setContent(content);
-        announcement.setPostedByUserId(postedByUserId);
+        announcement.setPostedByUserId(postedByUserId); // Should remain the original poster or current admin
         announcement.setTargetRole(targetRoleStr);
         announcement.setExpiryDate(expiryDate);
 

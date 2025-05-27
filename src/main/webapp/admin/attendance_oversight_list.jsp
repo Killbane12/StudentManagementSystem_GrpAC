@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content">
     <h2>Attendance Oversight</h2>
     <c:if test="${not empty sessionScope.successMessage}">
@@ -51,13 +51,11 @@
             </tr>
         </c:forEach>
         <c:if test="${empty attendanceList}">
-            <tr>
-                <td colspan="8">No attendance records found.</td>
-            </tr>
+            <tr><td colspan="8">No attendance records found.</td></tr>
         </c:if>
         </tbody>
     </table>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

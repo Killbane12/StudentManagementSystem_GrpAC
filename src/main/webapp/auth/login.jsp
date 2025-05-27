@@ -3,71 +3,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="${pageContext.request.contextPath}/assets/img/favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Student Management System - Group_AC</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/common-elements.css">
     <style>
-        /* Simple centering for login form */
         body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            background-color: #f4f7f6;
+            margin: 0;
         }
 
         .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
-            margin-top: 20px;
+            text-align: center;
         }
 
-        /* Let header/footer take space */
-        header.main-header, footer.main-footer {
+        .login-container img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-group input[type="text"], .form-group input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
             width: 100%;
-            flex-shrink: 0;
         }
 
-        /* Ensure header/footer span width */
-        main.main-content {
-            width: 100%;
-            box-shadow: none;
-            background: transparent;
-            margin: 0;
-            padding: 0;
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
         }
 
-        /* Remove default main styles */
+        .error-message {
+            color: red;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .info-message {
+            color: green;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
-<body> <%-- Added data attribute for JS --%>
-<jsp:include page="/common/header.jsp"/>
+<body>
+<div class="login-container">
+    <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo">
+    <h2>Student Management System Login</h2>
 
-<main class="main-content login-container">
-    <h1>Login</h1>
-    <c:if test="${not empty requestScope.errorMessage}">
-        <p class="message error">${requestScope.errorMessage}</p>
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <p class="error-message">${sessionScope.errorMessage}</p>
+        <c:remove var="errorMessage" scope="session"/>
     </c:if>
-    <c:if test="${param.logout == 'success'}"> <%-- Check for logout message param --%>
-        <p class="message success">You have been logged out successfully.</p>
+    <c:if test="${param.logout == 'true'}">
+        <p class="info-message">You have been logged out successfully.</p>
     </c:if>
+    <c:if test="${param.auth_error == 'true'}">
+        <p class="error-message">Session expired or invalid. Please login again.</p>
+    </c:if>
+
 
     <form action="${pageContext.request.contextPath}/LoginServlet" method="post">
-        <div>
+        <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required placeholder="Enter username">
+            <input type="text" id="username" name="username" required>
         </div>
-        <div>
+        <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required placeholder="Enter password">
+            <input type="password" id="password" name="password" required>
         </div>
-        <button type="submit">Login</button>
+        <div class="form-group">
+            <input type="submit" value="Login">
+        </div>
     </form>
-</main>
-
-<jsp:include page="/common/footer.jsp"/>
-<%-- No extra scripts needed for basic login --%>
+</div>
 </body>
 </html>

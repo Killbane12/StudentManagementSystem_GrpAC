@@ -1,18 +1,13 @@
 package com.grpAC_SMS.controller.admin;
 
-import com.grpAC_SMS.dao.AcademicTermDao;
-import com.grpAC_SMS.dao.CourseDao;
-import com.grpAC_SMS.dao.EnrollmentDao;
-import com.grpAC_SMS.dao.StudentDao;
-import com.grpAC_SMS.dao.impl.AcademicTermDaoImpl;
-import com.grpAC_SMS.dao.impl.CourseDaoImpl;
-import com.grpAC_SMS.dao.impl.EnrollmentDaoImpl;
-import com.grpAC_SMS.dao.impl.StudentDaoImpl;
+import com.grpAC_SMS.dao.*;
+import com.grpAC_SMS.dao.impl.*;
+import com.grpAC_SMS.model.*;
 import com.grpAC_SMS.exception.DataAccessException;
-import com.grpAC_SMS.model.Enrollment;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.DateFormatter;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 @WebServlet("/ManageEnrollmentsServlet")
@@ -114,11 +110,11 @@ public class ManageEnrollmentsServlet extends HttpServlet {
     }
 
     private void loadDropdownData(HttpServletRequest request) {
-        if (request.getAttribute("studentList") == null) request.setAttribute("studentList", studentDao.findAll());
-        if (request.getAttribute("courseList") == null) request.setAttribute("courseList", courseDao.findAll());
-        if (request.getAttribute("termList") == null) request.setAttribute("termList", academicTermDao.findAll());
+        if(request.getAttribute("studentList") == null) request.setAttribute("studentList", studentDao.findAll());
+        if(request.getAttribute("courseList") == null) request.setAttribute("courseList", courseDao.findAll());
+        if(request.getAttribute("termList") == null) request.setAttribute("termList", academicTermDao.findAll());
         String[] statuses = {"ENROLLED", "COMPLETED", "DROPPED"};
-        if (request.getAttribute("statusList") == null) request.setAttribute("statusList", statuses);
+        if(request.getAttribute("statusList") == null) request.setAttribute("statusList", statuses);
     }
 
     private void preserveFormDataOnError(HttpServletRequest request, String action) {
@@ -129,19 +125,15 @@ public class ManageEnrollmentsServlet extends HttpServlet {
             } catch (NumberFormatException e) { /* ignore */ }
         }
         String studentIdStr = request.getParameter("studentId");
-        if (!InputValidator.isNullOrEmpty(studentIdStr) && InputValidator.isInteger(studentIdStr))
-            enrollment.setStudentId(Integer.parseInt(studentIdStr));
+        if (!InputValidator.isNullOrEmpty(studentIdStr) && InputValidator.isInteger(studentIdStr)) enrollment.setStudentId(Integer.parseInt(studentIdStr));
 
         String courseIdStr = request.getParameter("courseId");
-        if (!InputValidator.isNullOrEmpty(courseIdStr) && InputValidator.isInteger(courseIdStr))
-            enrollment.setCourseId(Integer.parseInt(courseIdStr));
+        if (!InputValidator.isNullOrEmpty(courseIdStr) && InputValidator.isInteger(courseIdStr)) enrollment.setCourseId(Integer.parseInt(courseIdStr));
 
         String termIdStr = request.getParameter("academicTermId");
-        if (!InputValidator.isNullOrEmpty(termIdStr) && InputValidator.isInteger(termIdStr))
-            enrollment.setAcademicTermId(Integer.parseInt(termIdStr));
+        if (!InputValidator.isNullOrEmpty(termIdStr) && InputValidator.isInteger(termIdStr)) enrollment.setAcademicTermId(Integer.parseInt(termIdStr));
 
-        if (InputValidator.isValidDate(request.getParameter("enrollmentDate")))
-            enrollment.setEnrollmentDate(DateFormatter.stringToSqlDate(request.getParameter("enrollmentDate")));
+        if(InputValidator.isValidDate(request.getParameter("enrollmentDate"))) enrollment.setEnrollmentDate(DateFormatter.stringToSqlDate(request.getParameter("enrollmentDate")));
         enrollment.setStatus(request.getParameter("status"));
 
         request.setAttribute("enrollment", enrollment);
@@ -156,14 +148,14 @@ public class ManageEnrollmentsServlet extends HttpServlet {
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("enrollment") == null) request.setAttribute("enrollment", new Enrollment());
+        if(request.getAttribute("enrollment") == null) request.setAttribute("enrollment", new Enrollment());
         loadDropdownData(request);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/enrollment_form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getAttribute("enrollment") == null) {
+        if(request.getAttribute("enrollment") == null) {
             int id = Integer.parseInt(request.getParameter("id"));
             Enrollment existingEnrollment = enrollmentDao.findById(id)
                     .orElseThrow(() -> new DataAccessException("Enrollment not found with ID: " + id));

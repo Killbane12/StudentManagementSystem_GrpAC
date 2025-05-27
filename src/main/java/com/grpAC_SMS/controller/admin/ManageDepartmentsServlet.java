@@ -2,9 +2,10 @@ package com.grpAC_SMS.controller.admin;
 
 import com.grpAC_SMS.dao.DepartmentDao;
 import com.grpAC_SMS.dao.impl.DepartmentDaoImpl;
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Department;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -78,14 +79,13 @@ public class ManageDepartmentsServlet extends HttpServlet {
             // Preserve form data on error
             Department dept = new Department();
             dept.setDepartmentName(request.getParameter("departmentName"));
-            if (request.getParameter("departmentId") != null && !request.getParameter("departmentId").isEmpty()) {
+            if(request.getParameter("departmentId") != null && !request.getParameter("departmentId").isEmpty()){
                 dept.setDepartmentId(Integer.parseInt(request.getParameter("departmentId")));
             }
             request.setAttribute("department", dept);
 
-            if ("create".equals(action)) showNewForm(request, response);
-            else if ("update".equals(action))
-                showEditForm(request, response); // Needs re-fetch or careful handling of ID
+            if("create".equals(action)) showNewForm(request,response);
+            else if ("update".equals(action)) showEditForm(request,response); // Needs re-fetch or careful handling of ID
             else response.sendRedirect(request.getContextPath() + "/ManageDepartmentsServlet?action=list");
 
         } catch (Exception e) {
@@ -125,14 +125,8 @@ public class ManageDepartmentsServlet extends HttpServlet {
         String name = request.getParameter("departmentName");
         if (InputValidator.isNullOrEmpty(name)) {
             request.getSession().setAttribute("errorMessage", "Department name cannot be empty.");
-            Department dept = new Department();
-            dept.setDepartmentName(name);
-            request.setAttribute("department", dept);
-            try {
-                showNewForm(request, response);
-            } catch (ServletException e) {
-                logger.error("Servlet Exc in create", e);
-            }
+            Department dept = new Department(); dept.setDepartmentName(name); request.setAttribute("department", dept);
+            try { showNewForm(request, response); } catch (ServletException e) { logger.error("Servlet Exc in create", e); }
             return;
         }
         Department department = new Department(name);
@@ -146,14 +140,8 @@ public class ManageDepartmentsServlet extends HttpServlet {
         String name = request.getParameter("departmentName");
         if (InputValidator.isNullOrEmpty(name)) {
             request.getSession().setAttribute("errorMessage", "Department name cannot be empty.");
-            Department dept = departmentDao.findById(id).orElse(new Department());
-            dept.setDepartmentName(name);
-            request.setAttribute("department", dept);
-            try {
-                showEditForm(request, response);
-            } catch (ServletException e) {
-                logger.error("Servlet Exc in update", e);
-            }
+            Department dept = departmentDao.findById(id).orElse(new Department()); dept.setDepartmentName(name); request.setAttribute("department", dept);
+            try { showEditForm(request, response); } catch (ServletException e) { logger.error("Servlet Exc in update", e); }
             return;
         }
         Department department = new Department(name);

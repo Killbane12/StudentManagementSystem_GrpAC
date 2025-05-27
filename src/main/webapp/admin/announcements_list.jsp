@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content">
     <h2>Announcement Management</h2>
     <c:if test="${not empty sessionScope.successMessage}">
@@ -20,8 +20,7 @@
         <p class="message error">${sessionScope.errorMessage}</p>
         <c:remove var="errorMessage" scope="session"/>
     </c:if>
-    <a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=add" class="button button-add">Add New
-                                                                                                                 Announcement</a>
+    <a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=add" class="button button-add">Add New Announcement</a>
     <table class="data-table">
         <thead>
         <tr>
@@ -45,20 +44,17 @@
                 <td><fmt:formatDate value="${ann.createdAt}" pattern="yyyy-MM-dd HH:mm"/></td>
                 <td class="actions">
                     <a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=edit&id=${ann.announcementId}">Edit</a>
-                    <a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=delete&id=${ann.announcementId}"
-                       class="delete"
+                    <a href="${pageContext.request.contextPath}/ManageAnnouncementsServlet?action=delete&id=${ann.announcementId}" class="delete"
                        onclick="return confirm('Are you sure you want to delete this announcement?');">Delete</a>
                 </td>
             </tr>
         </c:forEach>
         <c:if test="${empty announcementList}">
-            <tr>
-                <td colspan="7">No announcements found.</td>
-            </tr>
+            <tr><td colspan="7">No announcements found.</td></tr>
         </c:if>
         </tbody>
     </table>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

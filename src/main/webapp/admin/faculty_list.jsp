@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content">
     <h2>Faculty Profile Management</h2>
     <c:if test="${not empty sessionScope.successMessage}">
@@ -20,8 +20,7 @@
         <p class="message error">${sessionScope.errorMessage}</p>
         <c:remove var="errorMessage" scope="session"/>
     </c:if>
-    <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=add" class="button button-add">Add New
-                                                                                                           Faculty</a>
+    <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=add" class="button button-add">Add New Faculty</a>
     <table class="data-table">
         <thead>
         <tr>
@@ -52,26 +51,21 @@
                     </c:choose>
                 </td>
                 <td class="actions">
-                    <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=edit&id=${faculty.facultyMemberId}">Edit
-                                                                                                                                Profile</a>
+                    <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=edit&id=${faculty.facultyMemberId}">Edit Profile</a>
                     <c:if test="${not empty faculty.userId}">
-                        <a href="${pageContext.request.contextPath}/ManageUsersServlet?action=edit&userId=${faculty.userId}"
-                           title="Edit linked user account (email, password, status)">Edit User</a>
+                        <a href="${pageContext.request.contextPath}/ManageUsersServlet?action=edit&userId=${faculty.userId}" title="Edit linked user account (email, password, status)">Edit User</a>
                     </c:if>
-                    <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=delete&id=${faculty.facultyMemberId}"
-                       class="delete"
+                    <a href="${pageContext.request.contextPath}/ManageFacultyServlet?action=delete&id=${faculty.facultyMemberId}" class="delete"
                        onclick="return confirm('Are you sure you want to delete this faculty profile? This may also affect the linked user account.');">Delete</a>
                 </td>
             </tr>
         </c:forEach>
         <c:if test="${empty facultyList}">
-            <tr>
-                <td colspan="7">No faculty members found.</td>
-            </tr>
+            <tr><td colspan="7">No faculty members found.</td></tr>
         </c:if>
         </tbody>
     </table>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

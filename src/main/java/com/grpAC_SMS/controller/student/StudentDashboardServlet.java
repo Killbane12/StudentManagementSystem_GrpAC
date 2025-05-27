@@ -1,17 +1,11 @@
 package com.grpAC_SMS.controller.student;
 
-import com.grpAC_SMS.dao.CourseDao;
-import com.grpAC_SMS.dao.StudentDao;
-import com.grpAC_SMS.model.User;
-import com.grpAC_SMS.dao.impl.CourseDaoImpl;
-import com.grpAC_SMS.dao.impl.EnrollmentDaoImpl;
-import com.grpAC_SMS.dao.impl.LectureSessionDaoImpl;
-import com.grpAC_SMS.dao.impl.StudentDaoImpl;
+import com.grpAC_SMS.dao.*;
+import com.grpAC_SMS.dao.impl.*;
+import com.grpAC_SMS.model.*;
+import com.grpAC_SMS.service.AttendanceService; // Using service for percentage
+import com.grpAC_SMS.service.impl.AttendanceServiceImpl;
 import com.grpAC_SMS.util.ApplicationConstants;
-import com.grpAC_SMS.model.Course;
-import com.grpAC_SMS.model.Enrollment;
-import com.grpAC_SMS.model.LectureSession;
-import com.grpAC_SMS.model.Student;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -20,89 +14,102 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-/**
- * Servlet that handles the student dashboard view.
- * Retrieves student and user details and forwards them to the dashboard JSP page.
- */
-@WebServlet(name = "StudentDashboardServlet", value = "/student/dashboard")
+@WebServlet("/StudentDashboardServlet")
 public class StudentDashboardServlet extends HttpServlet {
-
+    private static final Logger logger = LoggerFactory.getLogger(StudentDashboardServlet.class);
     private StudentDao studentDao;
+    private CourseDao courseDao;
+    private AnnouncementDao announcementDao;
+    private AcademicTermDao academicTermDao;
+    private AttendanceService attendanceService;
 
-    /**
-     * Initializes the servlet and sets up the StudentDao implementation.
-     */
+
     @Override
     public void init() {
         studentDao = new StudentDaoImpl();
+        courseDao = new CourseDaoImpl();
+        announcementDao = new AnnouncementDaoImpl();
+        academicTermDao = new AcademicTermDaoImpl();
+        attendanceService = new AttendanceServiceImpl(); // Uses its own DAOs
     }
 
-    /**
-     * Handles GET requests to the student dashboard.
-     * Ensures the user is logged in, fetches student/user info, and forwards to the dashboard page.
-     *
-     * @param request  the HTTP request
-     * @param response the HTTP response
-     * @throws SecurityException in case of unauthorized access
-     * @throws IOException       in case of an I/O error
-     * @throws ServletException  in case of servlet-related errors
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws SecurityException, IOException, ServletException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        User loggedInUser = (session != null) ? (User) session.getAttribute(ApplicationConstants.SESSION_USER) : null;
 
-        // Get the current session, or create one if it doesn't exist
-        HttpSession session = request.getSession();
-
-        // Redirect to login page if no user is logged in
-        if (session == null || session.getAttribute(ApplicationConstants.LOGGED_IN_USER_SESSION_ATTR) == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login");
-            return;  // Ensure further processing stops after redirect
+        if (loggedInUser == null || loggedInUser.getRole() != Role.STUDENT) {
+            response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+            return;
         }
 
-        // Retrieve the currently logged-in user from the session
-        User sessionUser = (User) session.getAttribute(ApplicationConstants.LOGGED_IN_USER_SESSION_ATTR);
-        String username = sessionUser.getUsername();
+        try {
+            Optional<Student> studentOpt = studentDao.findByUserId(loggedInUser.getUserId());
+            if (studentOpt.isEmpty()) {
+                logger.error("Student profile not found for user ID: {}", loggedInUser.getUserId());
+                request.getSession().setAttribute(ApplicationConstants.SESSION_ERROR_MESSAGE, "Your student profile could not be found.");
+                response.sendRedirect(request.getContextPath() + "/auth/login.jsp");
+                return;
+            }
+            Student studentProfile = studentOpt.get();
+            request.setAttribute("studentProfile", studentProfile); // For welcome message
 
-        // Fetch student information associated with the username
-        Student student = studentDao.getStudentByUsername(username);
-        request.setAttribute("student", student);
+            // Get current academic term
+            Optional<AcademicTerm> currentTermOpt = academicTermDao.findCurrentTerm(LocalDate.now());
+            AcademicTerm currentTerm = null;
+            if(currentTermOpt.isPresent()){
+                currentTerm = currentTermOpt.get();
+                request.setAttribute("currentTermName", currentTerm.getTermName());
+            } else {
+                List<AcademicTerm> allTerms = academicTermDao.findAll(); // Fallback to latest if no current
+                if(!allTerms.isEmpty()) {
+                    currentTerm = allTerms.get(0); // findAll is ordered by start_date DESC
+                    request.setAttribute("currentTermName", currentTerm.getTermName() + " (Latest)");
+                } else {
+                    request.setAttribute("currentTermName", "N/A (No terms defined)");
+                }
+            }
 
-        // Fetch user information associated with the username
-        User user = studentDao.getUserByUsername(username);
-        request.setAttribute("user", user);
+            List<Course> enrolledCoursesInCurrentTerm = new ArrayList<>();
+            Map<Integer, Double> attendancePercentages = new HashMap<>(); // CourseID -> Percentage
+            List<Integer> courseIdsForAttendanceCalc = new ArrayList<>();
 
-        // Forward request to the JSP page for rendering the dashboard
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/student/dashboard.jsp");
-        dispatcher.forward(request, response);
-      
-        StudentDaoImpl stuimpl = new StudentDaoImpl();
-        List<Student> students = stuimpl.selectStudents();
-        req.setAttribute("student_list", students);
-        stuimpl.selectStudents();
+            if (currentTerm != null) {
+                enrolledCoursesInCurrentTerm = courseDao.findCoursesByStudentIdAndTermId(studentProfile.getStudentId(), currentTerm.getAcademicTermId());
+                for (Course course : enrolledCoursesInCurrentTerm) {
+                    courseIdsForAttendanceCalc.add(course.getCourseId());
+                }
+                if(!courseIdsForAttendanceCalc.isEmpty()){
+                    attendancePercentages = attendanceService.getAttendancePercentageForStudentCourses(studentProfile.getStudentId(), courseIdsForAttendanceCalc, currentTerm.getAcademicTermId());
+                }
+            }
 
-        CourseDaoImpl coimpl = new CourseDaoImpl();
-        List<Course> co = coimpl.selectCourse();
-        req.setAttribute("course_list", co);
-        coimpl.selectCourse();
+            request.setAttribute("enrolledCourses", enrolledCoursesInCurrentTerm);
+            request.setAttribute("attendancePercentages", attendancePercentages);
 
-        EnrollmentDaoImpl enrollimpl = new EnrollmentDaoImpl();
-        List<Enrollment> enroll = enrollimpl.selectEnrollments();
-        req.setAttribute("enrollment_list", enroll);
-        enrollimpl.selectEnrollments();
+            List<Announcement> announcements = announcementDao.findTargetedAnnouncements(Role.STUDENT, 5); // Get latest 5
+            request.setAttribute("announcements", announcements);
 
-        LectureSessionDaoImpl lecsessionimpl = new LectureSessionDaoImpl();
-        List<LectureSession> lecture_session = lecsessionimpl.selectLectureSession();
-        req.setAttribute("lecturs_list", lecture_session);
-       // lecsessionimpl.selectLectureSession();
+            logger.debug("Forwarding to student dashboard for user: {}", loggedInUser.getUsername());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/student/dashboard.jsp");
+            dispatcher.forward(request, response);
 
-
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/student/dashboard.jsp");
-        dispatcher.forward(req, resp);
+        } catch (Exception e) {
+            logger.error("Error preparing student dashboard for user {}: {}", loggedInUser.getUsername(), e.getMessage(), e);
+            request.setAttribute("errorMessage", "Could not load your dashboard data: " + e.getMessage());
+            // Still attempt to forward to dashboard to show the error message there
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/student/dashboard.jsp");
+            dispatcher.forward(request, response);
+        }
     }
-
 }

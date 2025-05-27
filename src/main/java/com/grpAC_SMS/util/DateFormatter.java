@@ -1,14 +1,13 @@
 package com.grpAC_SMS.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DateFormatter {
     private static final Logger logger = LoggerFactory.getLogger(DateFormatter.class);
@@ -77,7 +76,6 @@ public class DateFormatter {
 
     /**
      * Formats a LocalDateTime to a string suitable for HTML datetime-local input ("yyyy-MM-ddTHH:mm").
-     *
      * @param localDateTime The LocalDateTime object.
      * @return Formatted string or an empty string if input is null.
      */
@@ -102,7 +100,6 @@ public class DateFormatter {
 
     /**
      * Converts a java.sql.Timestamp object to a LocalDateTime.
-     *
      * @param timestamp The java.sql.Timestamp object.
      * @return LocalDateTime or null if input is null.
      */
@@ -118,7 +115,6 @@ public class DateFormatter {
 
     /**
      * Parses a string in ISO_LOCAL_DATE_TIME format (e.g., "yyyy-MM-ddTHH:mm:ss") to LocalDateTime.
-     *
      * @param dateTimeString The datetime string.
      * @return LocalDateTime or null if parsing fails.
      */
@@ -141,7 +137,6 @@ public class DateFormatter {
 
     /**
      * Formats a LocalDateTime to an ISO_LOCAL_DATE_TIME string (e.g., "yyyy-MM-ddTHH:mm:ss").
-     *
      * @param localDateTime The LocalDateTime object.
      * @return Formatted string or an empty string if input is null.
      */

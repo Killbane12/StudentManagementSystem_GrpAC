@@ -9,10 +9,12 @@ public class Announcement {
     private String content;
     private int postedByUserId;
     private String targetRole; // ENUM('ALL', 'STUDENT', 'FACULTY', 'ADMIN')
-    private String imageFilePath; // For future implementations
+    private String imageFilePath; // For future use
     private Date expiryDate;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+
+    private transient String contentHtml; // For display with <br>
 
     // For display purposes
     private String postedByUsername;
@@ -43,6 +45,12 @@ public class Announcement {
 
     public void setContent(String content) {
         this.content = content;
+        // Automatically prepare HTML version when raw content is set
+        if (content != null) {
+            this.contentHtml = content.replace("\n", "<br />");
+        } else {
+            this.contentHtml = null;
+        }
     }
 
     public int getPostedByUserId() {
@@ -99,6 +107,19 @@ public class Announcement {
 
     public void setPostedByUsername(String postedByUsername) {
         this.postedByUsername = postedByUsername;
+    }
+
+    public String getContentHtml() {
+        // If contentHtml wasn't set (e.g. object created by DAO which only sets 'content')
+        // ensure it's generated on first access.
+        if (this.contentHtml == null && this.content != null) {
+            this.contentHtml = this.content.replace("\n", "<br />");
+        }
+        return contentHtml;
+    }
+
+    public void setContentHtml(String contentHtml) {
+        this.contentHtml = contentHtml;
     }
 
     @Override

@@ -1,22 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="icon" href="${pageContext.request.contextPath}/assets/img/favicon.ico" type="image/x-icon">
-<header class="main-header">
-    <div class="logo-container">
-        <%-- Assuming logo.png is in assets/img/ --%>
-        <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo">
-            <h1>Student Management System by Group_AC</h1>
-    </div>
-    <div class="user-info">
-        <c:if test="${not empty sessionScope.loggedInUser}">
-            <span>Welcome, <c:out value="${sessionScope.loggedInUser.username}"/> (<c:out
-                    value="${sessionScope.loggedInUser.role}"/>)</span>
-            <a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a>
-        </c:if>
-        <c:if test="${empty sessionScope.loggedInUser}">
-            <span>Guest</span>
-            <%-- Optionally add login link if header shown on login page --%>
-            <%-- <a href="${pageContext.request.contextPath}/auth/login.jsp">Login</a> --%>
-        </c:if>
+<header>
+    <div class="header-content">
+        <a href="${pageContext.request.contextPath}/index.jsp"><img
+                src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo" class="logo"></a>
+        <h1>Student Management System - NSBM</h1>
+        <div class="user-info">
+            <c:if test="${not empty sessionScope.loggedInUser}">
+                <span>Welcome, <c:out value="${sessionScope.loggedInUser.username}"/> (<c:out
+                        value="${sessionScope.loggedInUser.role}"/>)</span>
+                <a href="${pageContext.request.contextPath}/LogoutServlet">Logout</a>
+            </c:if>
+        </div>
     </div>
 </header>
+<nav class="main-nav">
+    <ul>
+        <c:choose>
+            <c:when test="${sessionScope.loggedInUser.role == 'ADMIN'}">
+                <jsp:include page="admin_nav.jsp"/>
+            </c:when>
+            <c:when test="${sessionScope.loggedInUser.role == 'FACULTY'}">
+                <jsp:include page="faculty_nav.jsp"/>
+            </c:when>
+            <c:when test="${sessionScope.loggedInUser.role == 'STUDENT'}">
+                <jsp:include page="student_nav.jsp"/>
+            </c:when>
+        </c:choose>
+    </ul>
+</nav>

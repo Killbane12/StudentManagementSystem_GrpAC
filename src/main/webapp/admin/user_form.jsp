@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 
 <div class="container main-content form-container">
     <h2>${empty user.userId ? 'Add New User' : 'Edit User'}</h2>
@@ -68,6 +68,6 @@
     </form>
 </div>
 
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>

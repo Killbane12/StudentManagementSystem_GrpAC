@@ -5,6 +5,7 @@ import com.grpAC_SMS.model.User;
 import com.grpAC_SMS.service.UserService;
 import com.grpAC_SMS.service.impl.UserServiceImpl;
 import com.grpAC_SMS.util.ApplicationConstants;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -70,18 +71,10 @@ public class LoginServlet extends HttpServlet {
             User user = (User) session.getAttribute(ApplicationConstants.SESSION_USER);
             String redirectURL = request.getContextPath();
             switch (user.getRole()) {
-                case ADMIN:
-                    redirectURL += "/AdminDashboardServlet";
-                    break;
-                case FACULTY:
-                    redirectURL += "/faculty/dashboard.jsp";
-                    break;
-                case STUDENT:
-                    redirectURL += "/student/dashboard.jsp";
-                    break;
-                default:
-                    redirectURL += "/auth/login.jsp";
-                    break;
+                case ADMIN: redirectURL += "/AdminDashboardServlet"; break;
+                case FACULTY: redirectURL += "/faculty/dashboard.jsp"; break;
+                case STUDENT: redirectURL += "/student/dashboard.jsp"; break;
+                default: redirectURL += "/auth/login.jsp"; break;
             }
             response.sendRedirect(redirectURL);
         } else {

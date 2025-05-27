@@ -4,11 +4,12 @@ import com.grpAC_SMS.dao.DepartmentDao;
 import com.grpAC_SMS.dao.ProgramDao;
 import com.grpAC_SMS.dao.impl.DepartmentDaoImpl;
 import com.grpAC_SMS.dao.impl.ProgramDaoImpl;
-import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.model.Department;
 import com.grpAC_SMS.model.Program;
+import com.grpAC_SMS.exception.DataAccessException;
 import com.grpAC_SMS.util.ApplicationConstants;
 import com.grpAC_SMS.util.InputValidator;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -109,7 +110,8 @@ public class ManageProgramsServlet extends HttpServlet {
             } else {
                 response.sendRedirect(request.getContextPath() + "/ManageProgramsServlet?action=" + ApplicationConstants.ACTION_LIST);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.error("General Exception in Programs POST for action {}: {}", action, e.getMessage(), e);
             request.getSession().setAttribute(ApplicationConstants.SESSION_ERROR_MESSAGE, "An unexpected error occurred: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/ManageProgramsServlet?action=" + ApplicationConstants.ACTION_LIST);
@@ -167,7 +169,7 @@ public class ManageProgramsServlet extends HttpServlet {
         }
         // If it is from a failed POST, 'program' attribute is already set by preserveFormDataOnError
         // but we still need departmentList if not already set
-        if (request.getAttribute("departmentList") == null) {
+        if(request.getAttribute("departmentList") == null){
             List<Department> departmentList = departmentDao.findAll();
             request.setAttribute("departmentList", departmentList);
         }
@@ -196,7 +198,7 @@ public class ManageProgramsServlet extends HttpServlet {
         int departmentId = Integer.parseInt(deptIdStr);
         Integer duration = null;
         if (!InputValidator.isNullOrEmpty(durationStr)) {
-            if (!InputValidator.isInteger(durationStr) || Integer.parseInt(durationStr) <= 0) {
+            if (!InputValidator.isInteger(durationStr) || Integer.parseInt(durationStr) <=0) {
                 request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Duration must be a positive number.");
                 preserveFormDataOnError(request, ApplicationConstants.ACTION_CREATE);
                 showNewForm(request, response);
@@ -238,7 +240,7 @@ public class ManageProgramsServlet extends HttpServlet {
         int departmentId = Integer.parseInt(deptIdStr);
         Integer duration = null;
         if (!InputValidator.isNullOrEmpty(durationStr)) {
-            if (!InputValidator.isInteger(durationStr) || Integer.parseInt(durationStr) <= 0) {
+            if (!InputValidator.isInteger(durationStr) || Integer.parseInt(durationStr) <=0) {
                 request.setAttribute(ApplicationConstants.REQ_ATTR_ERROR_MESSAGE, "Duration must be a positive number.");
                 preserveFormDataOnError(request, ApplicationConstants.ACTION_UPDATE);
                 showEditForm(request, response);

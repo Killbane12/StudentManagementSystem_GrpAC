@@ -10,23 +10,17 @@ public class Grade {
     private Integer gradedByFacultyId; // Can be null
     private Timestamp gradedDate;
     private String remarks;
-    private String courseName;
 
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
+    // For display purposes
     private String studentName;
     private String courseName;
     private String facultyName;
+    private transient String courseCode;
 
     public Grade() {
     }
 
+    // Getters and Setters
     public int getGradeId() {
         return gradeId;
     }
@@ -107,6 +101,14 @@ public class Grade {
         this.facultyName = facultyName;
     }
 
+
+    public String getCourseCode() { // <<< ADDED THIS
+        return courseCode;
+    }
+
+    public void setCourseCode(String courseCode) { // <<< ADDED THIS
+        this.courseCode = courseCode;
+    }
 
     @Override
     public String toString() {

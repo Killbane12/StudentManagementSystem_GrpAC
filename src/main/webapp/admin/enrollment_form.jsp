@@ -5,12 +5,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>${empty enrollment.enrollmentId ? 'Add New' : 'Edit'} Enrollment | Student Management System -
-                                                                 Group_AC</title>
+    <title>${empty enrollment.enrollmentId ? 'Add New' : 'Edit'} Enrollment | Student Management System - Group_AC</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
 </head>
 <body>
-<jsp:include page="/common/header.jsp"/>
+<jsp:include page="/common/header.jsp" />
 <div class="container main-content form-container">
     <h2>${empty enrollment.enrollmentId ? 'Add New Enrollment' : 'Edit Enrollment'}</h2>
     <c:if test="${not empty requestScope.errorMessage}">
@@ -39,8 +38,7 @@
             </select>
             <c:if test="${not empty enrollment.enrollmentId}"> <%-- If editing, studentId might not be changeable easily --%>
                 <input type="hidden" name="studentId" value="${enrollment.studentId}">
-                <small>Student cannot be changed for existing enrollment. To change student, delete and
-                       re-create.</small>
+                <small>Student cannot be changed for existing enrollment. To change student, delete and re-create.</small>
             </c:if>
         </div>
         <div class="form-group">
@@ -59,8 +57,7 @@
         </div>
         <div class="form-group">
             <label for="academicTermId">Academic Term (Required):</label>
-            <select id="academicTermId" name="academicTermId"
-                    required ${not empty enrollment.enrollmentId ? 'disabled' : ''}>
+            <select id="academicTermId" name="academicTermId" required ${not empty enrollment.enrollmentId ? 'disabled' : ''}>
                 <option value="">-- Select Term --</option>
                 <c:forEach var="term" items="${termList}">
                     <option value="${term.academicTermId}" ${enrollment.academicTermId == term.academicTermId ? 'selected' : ''}>
@@ -74,14 +71,12 @@
         </div>
         <div class="form-group">
             <label for="enrollmentDate">Enrollment Date (Required):</label>
-            <input type="date" id="enrollmentDate" name="enrollmentDate"
-                   value="${DateFormatter.sqlDateToString(enrollment.enrollmentDate)}" required>
+            <input type="date" id="enrollmentDate" name="enrollmentDate" value="${DateFormatter.sqlDateToString(enrollment.enrollmentDate)}" required>
         </div>
         <div class="form-group">
             <label for="status">Status (Required):</label>
             <select id="status" name="status" required>
-                <c:forEach var="st"
-                           items="${statusList}"> <%-- statusList defined in servlet (e.g., {"ENROLLED", "COMPLETED", "DROPPED"}) --%>
+                <c:forEach var="st" items="${statusList}"> <%-- statusList defined in servlet (e.g., {"ENROLLED", "COMPLETED", "DROPPED"}) --%>
                     <option value="${st}" ${enrollment.status == st ? 'selected' : (empty enrollment.status && st == 'ENROLLED' ? 'selected' : '')}>
                         <c:out value="${st}"/>
                     </option>
@@ -90,13 +85,11 @@
         </div>
 
         <div class="form-actions">
-            <button type="submit"
-                    class="button">${empty enrollment.enrollmentId ? 'Create Enrollment' : 'Update Enrollment'}</button>
-            <a href="${pageContext.request.contextPath}/ManageEnrollmentsServlet?action=list"
-               class="button button-secondary">Cancel</a>
+            <button type="submit" class="button">${empty enrollment.enrollmentId ? 'Create Enrollment' : 'Update Enrollment'}</button>
+            <a href="${pageContext.request.contextPath}/ManageEnrollmentsServlet?action=list" class="button button-secondary">Cancel</a>
         </div>
     </form>
 </div>
-<jsp:include page="/common/footer.jsp"/>
+<jsp:include page="/common/footer.jsp" />
 </body>
 </html>
