@@ -8,24 +8,6 @@
     <title>Login | Student Management System - Group_AC</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/styles.css">
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f7f6;
-            margin: 0;
-        }
-
-        .login-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
 
         .login-container img {
             max-width: 150px;
@@ -85,7 +67,7 @@
         }
     </style>
 </head>
-<body>
+<body class="login-page">
 <div class="login-container">
     <img src="${pageContext.request.contextPath}/assets/img/logo.png" alt="NSBM Logo">
     <h2>Student Management System Login</h2>
